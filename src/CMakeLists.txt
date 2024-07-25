@@ -21,8 +21,8 @@ file(GLOB MAIN
 )
 
 file(GLOB_RECURSE SOURCE_FILES
-    "./App/*.h"
-    "./App/*.cpp"
+    "./app/*.h"
+    "./app/*.cpp"
 )
 
 #Create a library target

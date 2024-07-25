@@ -1,4 +1,4 @@
-#include "App/View/View.h"
+#include "app/View/View.h"
 #include <QApplication>
 
 int main(int argc, char *argv[]){

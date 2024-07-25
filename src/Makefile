@@ -6,7 +6,9 @@ all: install
 
 install: clean uninstall
 	@mkdir -p ./out
+	@mkdir -p ./build
 	cd $(CMAKE_BUILD) && cmake .. && make && mv $(EXECUTE) ../${DIR_INSTALL}/
+	@make rm_build
 	@make run
 
 run:
@@ -15,7 +17,9 @@ run:
 uninstall:
 	@rm -rf $(DIR_INSTALL)
 
-clean:
-	@rm -rf $(CMAKE_BUILD)/*
+rm_build:
+	@rm -rf $(CMAKE_BUILD)
+
+clean: rm_build
 
 rebuild: clean install
