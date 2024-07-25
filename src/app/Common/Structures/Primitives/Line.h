@@ -1,14 +1,18 @@
 #ifndef LINE_H
 #define LINE_H
 
-typedef struct{
-    float x;
-    float y;
-} Point;
+#include "Point.h"
 
-typedef struct{
-    Point begin;
-    Point end;
-}Line;
+namespace s21{
+// typedef struct{
+//     float x;
+//     float y;
+// } Point;
+
+    typedef struct{
+        Point<float> begin;
+        Point<float> end;
+    }Line;
+}
 
 #endif

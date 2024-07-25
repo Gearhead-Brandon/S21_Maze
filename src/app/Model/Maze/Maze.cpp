@@ -50,9 +50,6 @@ namespace s21{
             }
         }
 
-        // std::cout << std::endl;
-        // verticalMatrix_.PrintMatrix();
-
         file >> std::ws;
 
         horizontalMatrix_.Resize(rows, cols);
@@ -74,9 +71,6 @@ namespace s21{
                 horizontalMatrix_(i, j) = token;
             }
         }
-
-        // std::cout << std::endl;
-        // horizontalMatrix_.PrintMatrix();
 
         loadMazeForPathFinder();
 
@@ -240,6 +234,10 @@ namespace s21{
         // PathRenderConfig conf = pathFinder_->getPath( Point<float>{width, height} );
 
         // return conf;
+    }
+
+    void Maze::QPathFinding(Point<int> start, Point<int> end){
+        pathFinder_->QPathFinding(start, end);
     }
 
     void Maze::clearPath(){

@@ -5,6 +5,7 @@
 #include "../../../Common/Structures/PathRenderConfig/PathRenderConfig.h"
 #include "../../../Common/Structures/OpResult/OpResult.h"
 #include "../../S21Matrix/S21Matrix.h"
+#include "Components/StateAction.h"
 #include <map> 
 
 namespace s21{
@@ -25,6 +26,8 @@ namespace s21{
         PathRenderConfig get(Point<float> areaSize);
 
         void setMaze(S21Matrix<char>&& maze);
+
+        void QPathFinding(Point<int> start, Point<int> end);
 
         void reset();
     

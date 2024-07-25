@@ -45,7 +45,7 @@ namespace s21{
         painter.setPen(QPen(Qt::black, 3));
 
         for(const Line& line : lines)
-            painter.drawLine(QPointF{line.begin.x, line.begin.y}, QPointF{line.end.x, line.end.y});
+            painter.drawLine(QPointF{line.begin.col, line.begin.row}, QPointF{line.end.col, line.end.row});
     }
 
     QColor MazeRenderer::getNextColor(int segmentIndex) {
@@ -109,7 +109,7 @@ namespace s21{
             if(i >= size - 2)
                 painter.setPen(QPen(Qt::red, 2));
 
-            painter.drawLine(QPointF{line.begin.x, line.begin.y}, QPointF{line.end.x, line.end.y});
+            painter.drawLine(QPointF{line.begin.col, line.begin.row}, QPointF{line.end.col, line.end.row});
         }
     }
 

@@ -460,21 +460,14 @@ QLayout* View::createFindPathLayout(){
                             QPushButton::hover { background-color: #2e2b2b; border: 2px solid #fafcfb; }");
     findPathBtn->setMinimumSize(320, 35);
 
-    QObject::connect(findPathBtn, &QPushButton::pressed, this, [startRowEdit, startColEdit, endRowEdit, endColEdit](){
+    QObject::connect(findPathBtn, &QPushButton::pressed, this, [ this, startRowEdit, startColEdit, endRowEdit, endColEdit](){
         int startRow = startRowEdit->toPlainText().toInt();
         int startCol = startColEdit->toPlainText().toInt();
 
         int endRow = endRowEdit->toPlainText().toInt();
         int endCol = endColEdit->toPlainText().toInt();
 
-        Point<int> start = {startRow, startCol};
-        Point<int> end = {endRow, endCol};
-
-        // OpResult res = model_.transformCave(birthLimit, deathLimit);
-
-        // if(!res.IsSuccess())
-        //     showErrorMessage(res.getErrorMessage().c_str());
-        std::cout << "FIND PATH" << std::endl;
+        model_.QPathFinding({startRow, startCol}, {endRow, endCol});
     });
 
     QVBoxLayout* vBox = new QVBoxLayout;

@@ -318,6 +318,10 @@ namespace s21{
         //     std::cout << std::endl;
         // }
     }
+
+    void PathFinder::QPathFinding(Point<int> start, Point<int> end){
+        std::cout << "QPathFinding" << std::endl;
+    }
 }
 
 // bool PathFinder::isValid(const S21Matrix<char>& maze2, int x, int y) {

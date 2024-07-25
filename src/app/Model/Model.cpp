@@ -68,6 +68,10 @@ namespace s21{
         return cave_->get(width, height);
     }
 
+    void Model::QPathFinding(Point<int> start, Point<int> end){
+        maze_->QPathFinding(start, end);
+    }
+
     void Model::clearPath(){
         maze_->clearPath();
     }
