@@ -287,6 +287,7 @@ namespace s21{
         Point<int> current = end;
 
         while (current != start) {
+            
             if (!parent.count(current))
                 return;  // No path found (e.g., unreachable endpoint)
 
@@ -319,100 +320,235 @@ namespace s21{
         // }
     }
 
-    void PathFinder::QPathFinding(Point<int> start, Point<int> end){
+    Action PathFinder::selectAction(const QTable& qTable, Point<int> currentPos, float epsilon){
+        const auto& state = qTable[currentPos.row][currentPos.col];
+        //std::cout << "EPSILON = " << epsilon << std::endl;
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_real_distribution<float> dis(0.0, 1.0);
+
+        if(dis(gen) < epsilon){
+            
+            std::uniform_int_distribution<int> action_dis(0, state.qValues.size() - 1);
+            return static_cast<Action>(action_dis(gen));
+           
+        }else{
+            auto max = std::max_element(state.qValues.begin(), state.qValues.end());
+
+            return static_cast<Action>(std::distance(state.qValues.begin(), max));
+        }
+    }
+
+    Point<int> PathFinder::getNextPoint(Point<int> current, Action action){
+        Point<int> next{current.col, current.row};
+        switch(action){
+            case Action::LEFT: 
+                next.col--;
+                break;
+            case Action::UP: 
+                next.row--;
+                break;
+            case Action::RIGHT:
+                next.col++;
+                break;
+            case Action::DOWN:
+                next.row++;
+                break;
+        }
+
+        // if(!isValid(next.col, next.row))
+        //     next = current;
+
+        return next;
+    }
+
+    float PathFinder::getReward(Point<int> current, Point<int>& next, Point<int> goal){
+        if(next == goal){
+            //std::cout << "GOOOOOOOOOAL" << std::endl;
+            return 10.0f;
+        }else if(!isValid(next.col, next.row)){
+            next = current;
+            //std::cout << "WAAAAAAAAAAAAALLL" << std::endl;
+            return -10.0f;
+        }else
+            return -0.1f;
+    }
+
+    void PathFinder::updateQTable(
+        QTable& qTable, Point<int> currentState, 
+        Action action, Point<int> next, 
+        float reward, float alpha, float gamma){
+
+        auto& state = qTable[currentState.row][currentState.col];
+        int index = static_cast<int>(action);
+
+        float maxQNext = *std::max_element(state.qValues.begin(), state.qValues.end());
+
+        //std::cout << "INDEX = " << index << std::endl;
+
+        state.qValues[index] = state.qValues[index] + alpha * (reward + gamma * maxQNext - state.qValues[index]);
+    }
+
+    void PathFinder::QPathFinding(Point<int> start, Point<int> goal){
         std::cout << "QPathFinding" << std::endl;
+
+        QTable qTable(maze_.GetRows(), std::vector<QActions>(maze_.GetCols(), QActions()));
+
+        start_ = start;
+        end_ = goal;
+
+        start.col *= 2;
+        start.row *= 2;
+        goal.col *= 2;
+        goal.row *= 2;
+
+        float alpha = 0.1f;
+        float gamma = 0.97f;
+
+        float e_initial = 1.0f;
+        float decay_rate = 0.05f;
+        float epsilon = e_initial * exp(-decay_rate * 0);
+
+        int numEpisodes = 1000;
+
+        S21Matrix<char> copy = maze_;
+
+        std::cout << std::endl;
+        for(int i = 0; i < copy.GetRows() ; i++){
+            for(int j = 0; j < copy.GetCols() ; j++){
+                if(copy(i,j) == '1')
+                    std::cout << "* ";
+                else if(copy(i,j) == '2')
+                    std::cout << "X ";
+                else if(copy(i,j) == '0')
+                    std::cout << "@ ";
+            }
+            std::cout << std::endl;
+        }
+
+        for(int episode = 0; episode < numEpisodes; episode++){
+            Point<int> currentState = start;
+
+            epsilon = e_initial * exp(-decay_rate * episode);
+            std::cout << "RAND = " << rand() % 4 << std::endl;
+            std::cout << "epsilon = " << epsilon << std::endl;
+
+            //epsilon = 0.1f;
+
+            while(currentState != goal){
+                
+                Action action = selectAction(qTable, currentState, epsilon);
+                // switch (action){
+                //     case Action::LEFT:
+                //         std::cout << "LEFT" << std::endl;
+                //         break;
+                //     case Action::UP:
+                //         std::cout << "UP" << std::endl;
+                //         break;
+                //     case Action::RIGHT:
+                //         std::cout << "RIGHT" << std::endl;
+                //         break;
+                //     case Action::DOWN:
+                //         std::cout << "DOWN" << std::endl;
+                //         break;
+                // }   
+
+                //std::cout << "DOWN2" << std::endl;
+
+                Point<int> next = getNextPoint(currentState, action);
+                //std::cout << "DOWN2" << std::endl;
+
+                float reward = getReward(currentState, next, goal);
+                //std::cout << "DOWN2" << std::endl;
+
+                // if(reward == -1.0f)
+                //     next = currentState;
+
+                // std::cout << "next = " << next.row << " " << next.col << std::endl;
+                // std::cout << "reward = " << reward << std::endl;
+
+                updateQTable(qTable, currentState, action, next, reward, alpha, gamma);
+                
+                currentState = next;
+            }
+        }
+
+        std::cout << "END" << std::endl;
+
+        buildQPath(qTable);
+    }
+
+    Action PathFinder::selectMaxAction(const QTable& qTable, Point<int> currentPos){
+        const auto& state = qTable[currentPos.row][currentPos.col];
+        auto max = std::max_element(state.qValues.begin(), state.qValues.end());
+        return static_cast<Action>(std::distance(state.qValues.begin(), max));
+    }
+
+    void PathFinder::buildQPath(const QTable& qTable){
+        //path_.clear();
+
+        std::cout << "buildQPath" << std::endl;
+        int count = 0;
+
+        std::cout << "START = " << start_.row << " " << start_.col << std::endl;
+        std::cout << "END_ = " << end_.row << " " << end_.col << std::endl;
+        std::cout << "ROWS = " << maze_.GetRows() << " COLS = " << maze_.GetCols() << std::endl;
+
+        for(int i = 0; i < maze_.GetRows(); i++)
+            for(int j = 0; j < maze_.GetCols(); j++){
+                std::cout << i << " " << j << std::endl;
+                std::cout << qTable[i][j].qValues[0] << " " << qTable[i][j].qValues[1] << " " << qTable[i][j].qValues[2] << " " << qTable[i][j].qValues[3] << std::endl;
+            }
+
+        
+
+        Point<int> current = start_;
+        Point<int> end = end_;
+
+        end.col *= 2;
+        end.row *= 2;
+
+        std::cout << "END = " << end.row << " " << end.col << std::endl;
+
+        current.col *= 2;
+        current.row *= 2;
+
+        std::map<Point<int>, Point<int>> parent;
+
+        while(current != end){
+
+            Action action = selectMaxAction(qTable, current);
+            switch (action){
+                case Action::LEFT:
+                    std::cout << "LEFT" << std::endl;
+                    break;
+                case Action::UP:
+                    std::cout << "UP" << std::endl;
+                    break;
+                case Action::RIGHT:
+                    std::cout << "RIGHT" << std::endl;
+                    break;
+                case Action::DOWN:
+                    std::cout << "DOWN" << std::endl;
+                    break;
+            }
+
+            Point<int> next = getNextPoint(current, action);
+
+            parent[next] = current;
+            //path_.push_back(next);
+
+            std::cout << "Current: " << current.row << " " << current.col << std::endl;
+            std::cout << "Next: " << next.row << " " << next.col << std::endl;
+
+            current = next;
+
+            count++;
+            if(count > 10) 
+                break;
+        }
+
+        reconstructPath(parent, {start_.row * 2 , start_.col * 2}, end);
     }
 }
-
-// bool PathFinder::isValid(const S21Matrix<char>& maze2, int x, int y) {
-//         const int rows = maze_.GetRows();
-//         const int cols = maze_.GetCols();
-
-//         if((x >= 0 && x < cols) && (y >= 0 && y < rows)){
-//             // bool r = false;
-
-//             // if(maze(y,x) == '0')
-//             //     return true;
-
-//             // return false;
-//             return maze_(y, x) == '0';
-//         }
-
-//         return false;
-
-//         // if ((x >= 0 && x < rows) && (y >= 0 && y < cols)) {
-//         //     bool r = false;
-
-//         //     // Check if it's a valid path character (e.g., '0') and allow only horizontal or vertical movements
-//         //     if (maze(y, x) == '0' &&
-//         //         ((x > 0 && maze(y, x - 1) != '1') ||        // Check left cell
-//         //         (x < cols - 1 && maze(y, x + 1) != '1') ||  // Check right cell
-//         //         (y > 0 && maze(y - 1, x) != '1') ||         // Check top cell
-//         //         (y < rows - 1 && maze(y + 1, x) != '1'))) {  // Check bottom cell
-//         //         r = true;
-//         //     }
-//         //}
-
-//         //return false;
-
-//         //return (x >= 0 && x < rows) && (y >= 0 && y < cols) && maze(x,y) == '0';
-//     }
-
-//     void PathFinder::findPathBFS(S21Matrix<char>& maze2){
-//         Point<int> start = start_;
-//         Point<int> goal = end_;
-
-//         start.col *= 2;
-//         start.row *= 2;
-//         goal.col *= 2;
-//         goal.row *= 2;
-
-//         std::queue<Point<int>> q;
-//         q.push(start);
-
-//         std::set<Point<int>> visited;
-//         visited.insert(start);
-
-//         //std::vector<Point<int>> path2;
-
-//         std::map<Point<int>, Point<int>> parent;
-
-//         // std::cout << "Start = " << start_.row << " " << start_.col << std::endl;
-//         // std::cout << "IStart = " << start.row << " " << start.col << std::endl;
-//         // std::cout << "End = " << end_.row << " " << end_.col << std::endl;
-//         // std::cout << "IEnd = " << end.row << " " << end.col << std::endl;
-
-//         // maze.PrintMatrix();
-//         // std::cout << std::endl;
-
-//         int dx_order[] = {-1, 0, 1, 0};
-//         int dy_order[] = {0, -1, 0, 1};
-
-//         while(!q.empty()){
-//             Point<int> current = q.front();
-//             q.pop();
-
-//             if(current == goal){
-//                 std::cout << "FOUND" << std::endl;
-//                 reconstructPath(parent, start, goal);
-//                 return;
-//             }
-
-//             for (int i = 0; i < 4; ++i) {  // Loop through directions in order
-//                 int dx = dx_order[i];
-//                 int dy = dy_order[i];
-
-//                 Point<int> next = {current.col + dx, current.row + dy};
-
-//                 if (isValid(maze_, next.col, next.row) && !visited.count(next)){
-//                     q.push(next);
-//                     visited.insert(next);
-//                     //path_.push_back(next);
-//                     parent[next] = current;
-//                 }
-//             }
-//         }
-
-//         std::cout << "<<< NOT FOUND >>>" << std::endl;
-//         //return {};
-//     }

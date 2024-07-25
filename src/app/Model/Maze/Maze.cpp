@@ -238,6 +238,7 @@ namespace s21{
 
     void Maze::QPathFinding(Point<int> start, Point<int> end){
         pathFinder_->QPathFinding(start, end);
+        Observable::notifyUpdate();
     }
 
     void Maze::clearPath(){

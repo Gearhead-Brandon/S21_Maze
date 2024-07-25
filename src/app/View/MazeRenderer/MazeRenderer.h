@@ -18,14 +18,10 @@ namespace s21{
         Model& model_;
         QImage* maze_;
         QImage* path_;
-        // QImage* cave_;
-        // bool isMazeOrCave_;
 
     public:
         MazeRenderer(Model& model);
         ~MazeRenderer();
-
-        //void changeArea();
 
     private:
         void update() override;

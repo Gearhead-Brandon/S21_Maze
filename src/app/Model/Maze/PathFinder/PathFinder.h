@@ -5,7 +5,9 @@
 #include "../../../Common/Structures/PathRenderConfig/PathRenderConfig.h"
 #include "../../../Common/Structures/OpResult/OpResult.h"
 #include "../../S21Matrix/S21Matrix.h"
-#include "Components/StateAction.h"
+#include "Components/QActions.h"
+#include <random>
+#include <cmath>
 #include <map> 
 
 namespace s21{
@@ -15,6 +17,8 @@ namespace s21{
         Point<int> end_;
         std::vector<Point<int>> path_;
         S21Matrix<char> maze_;
+
+        using QTable = std::vector<std::vector<QActions>>;
 
     public:
         PathFinder();
@@ -27,13 +31,11 @@ namespace s21{
 
         void setMaze(S21Matrix<char>&& maze);
 
-        void QPathFinding(Point<int> start, Point<int> end);
+        void QPathFinding(Point<int> start, Point<int> goal);
 
         void reset();
     
     private:
-        //void reset();
-
         void setPointToPath(Point<int> el, PathRenderConfig& config, Point<float> areaSize);
         
         void fillPath(PathRenderConfig& config, Point<float> areaSize);
@@ -48,6 +50,18 @@ namespace s21{
 
         void reconstructPath(std::map<Point<int>, Point<int>>& parent,
                              const Point<int>& start, const Point<int>& end);
+    
+        Action selectAction(const QTable& qTable, Point<int> currentPos, float epsilon);
+
+        Action selectMaxAction(const QTable& qTable, Point<int> currentPos);
+
+        Point<int> getNextPoint(Point<int> current, Action action);
+
+        float getReward(Point<int> current, Point<int>& next, Point<int> goal);
+    
+        void updateQTable(QTable& qTable, Point<int> currentState, Action action, Point<int> next, float reward, float alpha, float gamma);
+    
+        void buildQPath(const QTable& qTable);
     };
 }
 #endif

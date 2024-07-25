@@ -467,7 +467,8 @@ QLayout* View::createFindPathLayout(){
         int endRow = endRowEdit->toPlainText().toInt();
         int endCol = endColEdit->toPlainText().toInt();
 
-        model_.QPathFinding({startRow, startCol}, {endRow, endCol});
+        model_.QPathFinding({startCol, startRow}, {endCol, endRow});
+        //MazeRenderer->update();
     });
 
     QVBoxLayout* vBox = new QVBoxLayout;
