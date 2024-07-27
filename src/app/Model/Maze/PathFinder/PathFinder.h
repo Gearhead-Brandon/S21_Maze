@@ -1,9 +1,9 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-#include "../../../Common/Structures/Primitives/Point.h"
 #include "../../../Common/Structures/PathRenderConfig/PathRenderConfig.h"
 #include "../../../Common/Structures/OpResult/OpResult.h"
+#include "../../../Common/Structures/Primitives/Point.h"
 #include "../../S21Matrix/S21Matrix.h"
 #include "Components/QActions.h"
 #include <random>
