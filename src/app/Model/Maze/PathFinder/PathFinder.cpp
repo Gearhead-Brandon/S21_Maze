@@ -212,7 +212,7 @@ namespace s21{
         // Множество посещенных точек
         std::set<Point<int>> visited;
 
-        // Словарь для хранения родительских узлов
+        // Мап для хранения родительских узлов
         std::map<Point<int>, Point<int>> parent;
 
         // Начальная f-оценка (g = 0, h = эвристика)
@@ -223,8 +223,6 @@ namespace s21{
 
         int dx_order[] = {-1, 0, 1, 0};
         int dy_order[] = {0, -1, 0, 1};
-
-        //std::vector<Point<int>> path;
 
         while (!pq.empty()) {
             Point<int> current = pq.top().second;
@@ -261,10 +259,6 @@ namespace s21{
         const Point<int>& start, 
         const Point<int>& end
     ){  
-        
-        // std::cout << "R START = " << start.row << " " << start.col << std::endl;
-        // std::cout << "R END = " << end.row << " " << end.col << std::endl;
-        
         path_.clear();
 
         Point<int> current = end;
@@ -348,9 +342,6 @@ namespace s21{
     }
 
     float PathFinder::getReward(Point<int> current, Point<int>& next, Point<int> goal, bool& done){
-        // float manhattanDistance = abs(next.row - goal.row) + abs(next.col - goal.col);
-        // float heuristicReward = -0.1f * manhattanDistance;  // отрицательное значение, т.к. уменьшаем эвристику
-
         if(next == goal){
             done = true;
             return 10.0f;
@@ -359,7 +350,7 @@ namespace s21{
             next = current;
             return -10.0f;
         }else
-            return -0.1f;// + heuristicReward;
+            return -0.1f;
     }
 
     void PathFinder::updateQTable(
@@ -397,15 +388,14 @@ namespace s21{
     }
 
     void PathFinder::QPathFinding(Point<int> start, Point<int> goal){
-        int rows = maze_.GetRows();
-        int cols = maze_.GetCols();
+        int rows = maze_.GetRows() / 2;
+        int cols = maze_.GetCols() / 2;
         
-        if(!maze_.GetRows() || !maze_.GetCols() ||
-            start.col < 0 || start.col >= cols ||
-            start.row < 0 || start.row >= rows ||
-            goal.col < 0 || goal.col >= cols ||
-            goal.row < 0 || goal.row >= rows)
+        if( start.col < 0 || start.col >= cols || start.row < 0 || start.row >= rows ||
+            goal.col < 0  || goal.col >= cols  || goal.row < 0  || goal.row >= rows){
+            std::cout << "Incorrect maze size" << std::endl;
             return;
+        }
 
         QTable qTable(maze_.GetRows(), std::vector<QActions>(maze_.GetCols(), QActions()));
         
@@ -425,9 +415,7 @@ namespace s21{
         float epsilon = 0.0f;
 
         //int numEpisodes = 10'000; // 11000
-
         int numEpisodes = getEpisodesCount();
-        //int numEpisodes = 4'500;
 
         S21Matrix<char> copy = maze_;
 
@@ -449,7 +437,6 @@ namespace s21{
         for(int episode = 0; episode < numEpisodes; episode++){
             Point<int> currentState = start;
             
-            //int counter = 0;
             bool done = false;
 
             while(!done){
@@ -463,9 +450,6 @@ namespace s21{
                 updateQTable(qTable, currentState, action, next, reward, alpha, gamma);
 
                 currentState = next;
-
-                // if(counter++ > 1500000)
-                //     break;
             }
 
             epsilon = e_initial * exp(-decay_rate * episode );
