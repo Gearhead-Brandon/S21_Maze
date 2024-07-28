@@ -468,8 +468,23 @@ QLayout* View::createFindPathLayout(){
         int endCol = endColEdit->toPlainText().toInt();
 
         model_.QPathFinding({startCol, startRow}, {endCol, endRow});
-        //MazeRenderer->update();
     });
+
+    QLabel* infoLabel = new QLabel(
+        "<font color='red'>Red</font> - start point<br> "
+        "<font color='blue'>Blue</font> - end point<br>"
+        "<span style='color: white; background-color: black;'>CLEAR</span> - clear the path<br>"
+        "To find a path through <span style='color: white; background-color: #1077de;'>Machine Learning</span>,<br>"
+        "you need to <font color='red'>enter the coordinates of<br>"
+        "the points</font> and click the <span style='color: white; background-color: black;'>FIND PATH</span><br><br>"
+        "To use <span style='color: white; background-color: #1077de;'>conventional pathfinding tools</span>,<br>"
+        "simply <font color='red'>left-click</font> to select a <font color='red'>starting</font> point<br>"
+        "and <font color='blue'>right-click</font> to select a <font color='blue'>destination</font>"
+    );
+
+    infoLabel->setTextFormat(Qt::RichText); 
+    infoLabel->setStyleSheet("font-size: 15px;");
+    infoLabel->setAlignment(Qt::AlignCenter);
 
     QVBoxLayout* vBox = new QVBoxLayout;
     vBox->setSpacing(10);
@@ -480,6 +495,7 @@ QLayout* View::createFindPathLayout(){
     vBox->addWidget(endPointLabel);
     vBox->addLayout(textEditEndLayout);
     vBox->addWidget(findPathBtn);
+    vBox->addWidget(infoLabel);
     vBox->addStretch();
 
     return vBox;
