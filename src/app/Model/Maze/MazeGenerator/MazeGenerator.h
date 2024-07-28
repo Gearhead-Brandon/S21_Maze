@@ -22,7 +22,7 @@ namespace s21{
                      , S21Matrix<char>& horizontalMatrix
                      , int rows, int cols);
 
-        OpResult generateMaze();
+        OpResult generate();
 
     private:
 

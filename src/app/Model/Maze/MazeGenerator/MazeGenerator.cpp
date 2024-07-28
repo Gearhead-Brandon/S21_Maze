@@ -10,7 +10,7 @@ MazeGenerator::MazeGenerator(S21Matrix<char>& verticalMatrix, S21Matrix<char>& h
     , rows_(rows)
     , cols_(cols){}
 
-OpResult MazeGenerator::generateMaze(){
+OpResult MazeGenerator::generate(){
     verticalMatrix_.Resize(rows_, cols_);
     verticalMatrix_.FillNumbers('0');
 

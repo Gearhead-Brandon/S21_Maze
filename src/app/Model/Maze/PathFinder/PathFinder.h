@@ -57,10 +57,12 @@ namespace s21{
 
         Point<int> getNextPoint(Point<int> current, Action action);
 
-        float getReward(Point<int> current, Point<int>& next, Point<int> goal);
+        float getReward(Point<int> current, Point<int>& next, Point<int> goal, bool& done);
     
         void updateQTable(QTable& qTable, Point<int> currentState, Action action, Point<int> next, float reward, float alpha, float gamma);
-    
+
+        int getEpisodesCount();
+
         void buildQPath(const QTable& qTable);
     };
 }

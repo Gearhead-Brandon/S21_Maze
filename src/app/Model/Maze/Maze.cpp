@@ -122,7 +122,7 @@ namespace s21{
 
         MazeGenerator generator(verticalMatrix_, horizontalMatrix_, rows, cols);
 
-        OpResult result = generator.generateMaze();
+        OpResult result = generator.generate();
 
         if(result.IsSuccess()){
             save();
