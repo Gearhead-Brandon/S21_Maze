@@ -9,10 +9,14 @@ namespace s21{
 //     float y;
 // } Point;
 
-    typedef struct{
+    struct Line {
         Point<float> begin;
         Point<float> end;
-    }Line;
+
+        bool operator==(const Line &other) const {
+            return begin == other.begin && end == other.end;
+        }
+    };
 }
 
 #endif
