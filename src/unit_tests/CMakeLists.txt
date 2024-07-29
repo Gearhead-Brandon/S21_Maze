@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror -Wextra") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fprofile-arcs -ftest-coverage") 
 
 # set(CMAKE_AUTOMOC ON)
 # set(CMAKE_AUTORCC ON)
@@ -17,11 +17,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 
 file(GLOB MAIN
     "*.cpp"
-    "*.h"
 )
 
 file(GLOB_RECURSE MAZE_FILES
     "../App/Model/Maze/*.cpp"
+    "../App/Common/*.cpp"
 )
 
 #Create a library target
@@ -37,4 +37,12 @@ target_link_libraries(
     Maze
     -lgtest
     -lm
+)
+
+set_target_properties(
+    Tests
+    PROPERTIES
+    #COMPILE_FLAGS "-fprofile-arcs -ftest-coverage"
+    LINK_FLAGS "--coverage"
+    ENABLE_TESTING TRUE
 )

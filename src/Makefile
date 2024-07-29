@@ -6,6 +6,12 @@ DIR_TEST = unit_tests
 TEST_BUILD = unit_tests/build
 TEST_EXECUTE = Tests
 
+DIR_REPORT = report
+HTML_REPORT = REPORT.html
+EXCLUDE_FILES = "unit_tests/*" "App/Common/Structures/*" "App/Model/S21Matrix"\
+                "App/Model/Maze/PathFinder/PathFinder.h" "App/Model/Maze/PathFinder/Components/QActions.h"			
+EXCLUDE_REPORT = $(foreach file, $(EXCLUDE_FILES), --exclude $(file)) 
+
 all: install
 
 install: clean uninstall
@@ -26,8 +32,21 @@ tests: clean
 	cd $(TEST_BUILD) && cmake .. && make && mv $(TEST_EXECUTE) ..
 	@cd $(DIR_TEST) && ./${TEST_EXECUTE}
 
+gcov_report: tests
+	@mkdir -p $(DIR_REPORT)
+	@find ./$(TEST_BUILD)/CMakeFiles \( -name "*.gcno" -o -name "*.gcda"  \) -exec mv {} $(DIR_REPORT)/ \;
+	~/.local/bin/gcovr $(DIR_REPORT)/ $(EXCLUDE_REPORT) --html --html-details -o $(HTML_REPORT)
+	@make move_report
+
+move_report:
+	@mv *.html *.css $(DIR_REPORT)
+
+peer: gcov_report
+	@open $(DIR_REPORT)/$(HTML_REPORT)
+
 clean: rm_build
 	@rm -rf ./$(DIR_TEST)/$(TEST_EXECUTE)
+	@rm -rf ./$(DIR_REPORT)
 
 rm_build:
 	@rm -rf $(APP_BUILD)

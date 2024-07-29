@@ -20,9 +20,7 @@ void Observable::addObserver(IObserver *observer) {
  * method update
  */
 void Observable::notifyUpdate() {
-  int size = _observers.size();
-  for (int i = 0; i < size; i++) {
+  for (int i = 0; i < _observers.size(); i++)
     _observers[i]->update();
-  }
 }
 } // namespace s21
