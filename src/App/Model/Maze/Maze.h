@@ -38,6 +38,7 @@ namespace s21{
 
         void loadMatrixToFile(const S21Matrix<char> &matrix, std::ofstream& file, bool eof);
         void save();
+        void clear();
         void loadMazeForPathFinder();
     };
 }

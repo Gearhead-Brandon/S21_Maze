@@ -9,7 +9,9 @@ TEST_EXECUTE = Tests
 DIR_REPORT = report
 HTML_REPORT = REPORT.html
 EXCLUDE_FILES = "unit_tests/*" "App/Common/Structures/*" "App/Model/S21Matrix"\
-                "App/Model/Maze/PathFinder/PathFinder.h" "App/Model/Maze/PathFinder/Components/QActions.h"			
+                "App/Model/Maze/PathFinder/PathFinder.h"\
+				"App/Model/Maze/PathFinder/Components/QActions.h"\
+				"App/Model/Maze/FileReader/*"		
 EXCLUDE_REPORT = $(foreach file, $(EXCLUDE_FILES), --exclude $(file)) 
 
 all: install
@@ -46,6 +48,7 @@ peer: gcov_report
 
 clean: rm_build
 	@rm -rf ./$(DIR_TEST)/$(TEST_EXECUTE)
+	@rm -rf ./$(DIR_TEST)/generatedMazes
 	@rm -rf ./$(DIR_REPORT)
 
 rm_build:

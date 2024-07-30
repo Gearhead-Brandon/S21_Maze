@@ -29,6 +29,8 @@ namespace s21{
 
             start_ = {colIndex, rowIndex};
 
+            std::cout << "start_ = " << start_.row << " " << start_.col << std::endl;
+
             try{
                 if(end_.col > -1 && end_.row > -1)
                     findPathAStar();
@@ -53,6 +55,8 @@ namespace s21{
             Point<int> copy = end_;
 
             end_ = {colIndex, rowIndex};
+
+            std::cout << "end_ = " << end_.row << " " << end_.col << std::endl;
 
             try{
                 if(start_.col > -1 && start_.row > -1)
@@ -121,7 +125,7 @@ namespace s21{
         PathRenderConfig& config,
         Point<float> areaSize){
 
-        if(!path_.size()) 
+        if(path_.empty()) 
             return;
         
         int rows = maze_.GetRows() / 2;

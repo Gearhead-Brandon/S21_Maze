@@ -14,7 +14,7 @@ protected:
 TEST_F(MazeLoadTests, MazeLoadTest) {
     // Act
     OpResult result = maze_.load("test_files/test_maze_4_4.txt");
-    std::vector<Line> lines = maze_.get(500, 500);
+    std::vector<Line> lines = std::move(maze_.get(500, 500));
 
     // Assert
     EXPECT_TRUE(result.IsSuccess());
@@ -47,4 +47,84 @@ TEST_F(MazeLoadTests, MazeLoadTest) {
 
     EXPECT_EQ(lines.size(), expectedLines.size());
     EXPECT_EQ(lines, expectedLines);
+}
+
+TEST_F(MazeLoadTests, IncorrectMazeSize) {
+    // Act
+    OpResult result = maze_.load("test_files/incorrect_size/IS_rows_less_0.txt");
+    std::vector<Line> lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Incorrect maze size");
+
+    EXPECT_EQ(lines.size(), 0);
+
+
+    // Act
+    result = maze_.load("test_files/incorrect_size/IS_cols_less_0.txt");
+    lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Incorrect maze size");
+
+    EXPECT_EQ(lines.size(), 0);
+
+
+    // Act
+    result = maze_.load("test_files/incorrect_size/IS_cols_more_50.txt");
+    lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Incorrect maze size");
+
+    EXPECT_EQ(lines.size(), 0);
+
+
+    // Act
+    result = maze_.load("test_files/incorrect_size/IS_rows_more_50.txt");
+    lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Incorrect maze size");
+
+    EXPECT_EQ(lines.size(), 0);
+}
+
+TEST_F(MazeLoadTests, InvalidMazeData) {
+    // Act
+    OpResult result = maze_.load("test_files/invalid_maze_data/invalid_data_v.txt");
+    std::vector<Line> lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Invalid maze data");
+
+    EXPECT_EQ(lines.size(), 0);
+
+
+    // Act
+    result = maze_.load("test_files/invalid_maze_data/invalid_data_h.txt");
+    lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "Invalid maze data");
+
+    EXPECT_EQ(lines.size(), 0);
+}
+
+TEST_F(MazeLoadTests, FileDoesNotExist) {
+    // Act
+    OpResult result = maze_.load("test_files/does_not_exist.txt");
+    std::vector<Line> lines = std::move(maze_.get(500, 500));
+
+    // Assert
+    EXPECT_FALSE(result.IsSuccess());
+    EXPECT_EQ(result.getErrorMessage(), "File not found");
+
+    EXPECT_EQ(lines.size(), 0);
 }

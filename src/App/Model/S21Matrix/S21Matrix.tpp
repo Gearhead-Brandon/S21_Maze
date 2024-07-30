@@ -18,7 +18,8 @@ namespace s21{
 
             for (int i = 0; i < rows_; i++)
                 matrix_[i] = new T[cols_];
-
+        }else if (rows_ == 0 && cols_ == 0){
+            matrix_ = nullptr;
         } else
             throw std::invalid_argument(IncorrectValuesRowsOrColumns);
     }
@@ -111,10 +112,8 @@ namespace s21{
         //     for (int j = 0; j < minCols; j++)
         //         temp.matrix_[i][j] = matrix_[i][j];
         
-        for (int i = 0; i < minRows; i++) {
-            // Используйте memcpy для копирования строки матрицы
+        for (int i = 0; i < minRows; i++)
             std::memcpy(temp.matrix_[i], matrix_[i], minCols * sizeof(T));
-        }
 
         swap(temp);
     }

@@ -1,9 +1,9 @@
 #include "Maze.h"
+#include "FileReader/FileReader.h"
 #include <fstream>
 #include <sstream>
 #include <filesystem>
 #include <sys/stat.h>
-
 #include <iostream>
 
 namespace s21{
@@ -17,56 +17,58 @@ namespace s21{
     }
 
     OpResult Maze::load(const std::string &path){
-        std::ifstream file(path);
-        if (!file.is_open())
+        FileReader reader(path);
+        if (!reader.file.is_open())
             return {false, "File not found"};
 
-        size_t rows = 0, cols = 0;
+        int rows = 0, cols = 0;
 
-        file >> rows >> cols;
+        reader.file >> rows >> cols;
 
         if ((rows <= 0 || cols <= 0) || (rows > 50 || cols > 50))
             return {false, "Incorrect maze size"};
 
-        file >> std::ws;
+        reader.file >> std::ws;
 
         verticalMatrix_.Resize(rows, cols);
 
-        for (int i = 0; i < rows; i++)
-        {
-            std::string line("");
-            std::getline(file, line);
+        std::string line("");
+
+        for (int i = 0; i < rows; i++){
+            std::getline(reader.file, line);
             std::istringstream iss(line);
 
-            for (int j = 0; j < cols; j++)
-            {
+            for (int j = 0; j < cols; j++){
                 char token = 0;
                 iss >> token;
 
-                if (token != '0' && token != '1')
+                if (token != '0' && token != '1'){
+                    clear();
                     return {false, "Invalid maze data"};
+                }
 
                 verticalMatrix_(i, j) = token;
             }
         }
 
-        file >> std::ws;
+        reader.file >> std::ws;
+
+        line.clear();
 
         horizontalMatrix_.Resize(rows, cols);
 
-        for (int i = 0; i < rows; i++)
-        {
-            std::string line("");
-            std::getline(file, line);
+        for (int i = 0; i < rows; i++){
+            std::getline(reader.file, line);
             std::istringstream iss(line);
 
-            for (int j = 0; j < cols; j++)
-            {
+            for (int j = 0; j < cols; j++){
                 char token = 0;
                 iss >> token;
 
-                if (token != '0' && token != '1')
+                if (token != '0' && token != '1'){
+                    clear();
                     return {false, "Invalid maze data"};
+                }
 
                 horizontalMatrix_(i, j) = token;
             }
@@ -109,11 +111,16 @@ namespace s21{
         //     std::cout << std::endl;
         // }
 
-        file.close();
+        reader.file.close();
 
         Observable::notifyUpdate();
 
         return {true, ""};
+    }
+
+    void Maze::clear(){
+        verticalMatrix_.Resize(0, 0);
+        horizontalMatrix_.Resize(0, 0);
     }
 
     OpResult Maze::generate(int rows, int cols){
@@ -247,8 +254,8 @@ namespace s21{
     }
 
     void Maze::loadMazeForPathFinder(){
-        if(verticalMatrix_.GetRows() == 0)
-            return ;
+        // if(verticalMatrix_.GetRows() == 0)
+        //     return ;
 
         int rows = verticalMatrix_.GetRows();
         int cols = verticalMatrix_.GetCols();
@@ -258,7 +265,6 @@ namespace s21{
 
         for (int i = 0; i < rows ; i++) {
             for (int j = 0; j < cols ; j++) {
-                
                 matrix_(i * 2  ,j * 2 ) = '0'; // Проходы
 
                 if (j < cols - 1)

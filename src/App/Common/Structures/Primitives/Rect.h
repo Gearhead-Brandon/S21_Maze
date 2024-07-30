@@ -12,6 +12,10 @@ namespace s21{
         
         Rect(float x, float y, float width, float height) 
             : x(x), y(y), width(width), height(height) {}
+
+        bool operator==(const Rect &other) const {
+            return x == other.x && y == other.y && width == other.width && height == other.height;
+        }
     };
 }
 
