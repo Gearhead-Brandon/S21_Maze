@@ -22,7 +22,7 @@ namespace s21{
 
         reader.file >> rows >> cols;
 
-        if ((rows <= 0 || cols <= 0) || (rows > 50 || cols > 50))
+        if (rows <= 0 || rows > 50 || cols <= 0 || cols > 50)
             return {false, "Incorrect cave size"};
 
         reader.file >> std::ws;
@@ -54,8 +54,8 @@ namespace s21{
     }
 
     OpResult Cave::generate(int rows, int cols, int initChance){
-        if (rows <= 0 || cols <= 0 || rows > 50 || cols > 50)
-            return {false, "Incorrect maze size"};
+        if(rows <= 0 || cols <= 0 || rows > 50 || cols > 50)
+            return {false, "Incorrect cave size"};
 
         if(initChance <= 0 || initChance > 100)
             return {false, "Incorrect init chance"};
@@ -67,12 +67,10 @@ namespace s21{
         std::mt19937 gen(rd());
         std::uniform_int_distribution<int> distribution(0, 99); // Диапазон от 0 до 99
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
+        for (int i = 0; i < rows; i++)
+            for (int j = 0; j < cols; j++)
                 if (distribution(gen) < initChance)
                     caveMatrix_(i, j) = '1';
-            }
-        }
 
         Observable::notifyUpdate();
 
