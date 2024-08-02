@@ -23,8 +23,6 @@ namespace s21{
 
         OpResult generate(int rows, int cols, int initChance);
 
-        //OpResult transform(int birthLimit, int deathLimit);
-
         OpResult transform(bool full, int birthLimit, int deathLimit, int time);
 
         std::vector<Rect> get(float width, float height);
@@ -32,7 +30,7 @@ namespace s21{
     private:
         int countLivingNeighbors(S21Matrix<char> field, int row, int col);
     
-        OpResult parametersCheck(int birthLimit, int deathLimit);
+        OpResult parametersCheck(int birthLimit, int deathLimit, int time);
 
         void oneStepTransform(int birthLimit, int deathLimit);
     };

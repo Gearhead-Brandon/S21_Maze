@@ -10,10 +10,7 @@ namespace s21{
 
     Cave::Cave() : caveMatrix_() {}
 
-    //Cave::~Cave() {}
-
     OpResult Cave::load(const std::string &path) {
-        //std::ifstream file(path);
         FileReader reader(path);
         if (!reader.file.is_open())
             return {false, "File not found"};
@@ -45,8 +42,6 @@ namespace s21{
                 caveMatrix_(i, j) = token;
             }
         }
-
-        //reader.file.close();
         
         Observable::notifyUpdate();
 
@@ -65,7 +60,7 @@ namespace s21{
 
         std::random_device rd;
         std::mt19937 gen(rd());
-        std::uniform_int_distribution<int> distribution(0, 99); // Диапазон от 0 до 99
+        std::uniform_int_distribution<int> distribution(0, 99);
 
         for (int i = 0; i < rows; i++)
             for (int j = 0; j < cols; j++)
@@ -77,91 +72,38 @@ namespace s21{
         return {true, ""};
     }
 
-    OpResult Cave::parametersCheck(int birthLimit, int deathLimit){
+    OpResult Cave::parametersCheck(int birthLimit, int deathLimit, int time){
+        if(caveMatrix_.GetRows() < 1)
+            return {false, "Cave is empty"};
+
         if((birthLimit < 0 || deathLimit < 0) || (birthLimit > 7 || deathLimit > 7))
             return {false, "Incorrect limits"};
 
-        if(caveMatrix_.GetRows() < 1)
-            return {false, "Cave is empty"};
+        if(time < 0)
+            return {false, "Incorrect time"};
 
         return {true, ""};
     }
 
     OpResult Cave::transform(bool full, int birthLimit, int deathLimit, int time){
-        // if((birthLimit < 0 || deathLimit < 0) || (birthLimit > 7 || deathLimit > 7))
-        //     return {false, "Incorrect limits"};
-
-        // if(caveMatrix_.GetRows() < 1)
-        //     return {false, "Cave is empty"};
-
-        if(OpResult res = parametersCheck(birthLimit, deathLimit); !res.IsSuccess())
+        if(OpResult res = parametersCheck(birthLimit, deathLimit, time); !res.IsSuccess())
             return res;
-
-        if(time < 0)
-            return {false, "Incorrect time"};
-
-        //int counter = 0;
 
         int iterations = full ? 100 : 1;
         
         for(int i = 0; i < iterations; i++){
-            // if(counter >= 200)
-            //     break;
-
             S21Matrix<char> last = full ? caveMatrix_ : S21Matrix<char>{};
-
-            //transform(birthLimit, deathLimit);
 
             oneStepTransform(birthLimit, deathLimit);
 
             if(full && caveMatrix_ == last)
                 break;
 
-            //counter++;
-
             std::this_thread::sleep_for(std::chrono::milliseconds(time));
         }
 
         return {true, ""};
     }
-
-    // OpResult Cave::transform(int birthLimit, int deathLimit){
-    //     // if((birthLimit < 0 || deathLimit < 0) || (birthLimit > 7 || deathLimit > 7))
-    //     //     return {false, "Incorrect limits"};
-
-    //     if(OpResult res = parametersCheck(birthLimit, deathLimit); !res.IsSuccess())
-    //         return res;
-
-    //     // if(caveMatrix_.GetRows() < 1)
-    //     //     return {false, "Cave is empty"};
-
-    //     // int rows = caveMatrix_.GetRows();
-    //     // int cols = caveMatrix_.GetCols();
-
-    //     // S21Matrix<char> buffer(rows, cols);
-
-    //     // for (int i = 0; i < rows; i++) {
-    //     //     for (int j = 0; j < cols; j++) {
-    //     //         int count = countLivingNeighbors(buffer, i, j);
-
-    //     //         // if (caveMatrix_(i, j) == '0') // Dead
-    //     //         //     if (count > birthLimit)
-    //     //         //        caveMatrix_(i, j) = '1';
-
-    //     //         if (caveMatrix_(i, j) == '1') // Living
-    //     //             if (count < deathLimit)
-    //     //                 caveMatrix_(i, j) = '0';
-
-    //     //         if (caveMatrix_(i, j) == '0') // Dead
-    //     //             if (count > birthLimit)
-    //     //                caveMatrix_(i, j) = '1';
-    //     //    }
-    //     // }
-
-    //     // Observable::notifyUpdate();
-
-    //     return {true, ""};  
-    // }
 
     void Cave::oneStepTransform(int birthLimit, int deathLimit){
         int rows = caveMatrix_.GetRows();
@@ -172,10 +114,6 @@ namespace s21{
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 int count = countLivingNeighbors(buffer, i, j);
-
-                // if (caveMatrix_(i, j) == '0') // Dead
-                //     if (count > birthLimit)
-                //        caveMatrix_(i, j) = '1';
 
                 if (caveMatrix_(i, j) == '1') // Living
                     if (count < deathLimit)

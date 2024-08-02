@@ -16,33 +16,12 @@ namespace s21{
     }
 
     OpResult Model::loadMaze(const std::string& path){
-        // OpResult result = maze_->loadMaze(path);
-
-        // if (!result.IsSuccess())
-        //     return result;
-
-        // notifyUpdate();
-
-        // return result;
-
         return maze_->load(path);
     }
 
     OpResult Model::generateMaze(int rows, int cols){
-        // OpResult result = maze_->generateMaze(rows, cols);
-
-        // if (!result.IsSuccess())
-        //     return result;
-
-        // notifyUpdate();
-
-        // return result;
         return maze_->generate(rows, cols);
     }
-
-    // OpResult Model::transformCave(int birthLimit, int deathLimit){
-    //     return cave_->transform(birthLimit, deathLimit);
-    // }
 
     OpResult Model::transformCave(bool full, int birthLimit, int deathLimit, int time){
         return cave_->transform(full, birthLimit, deathLimit, time);

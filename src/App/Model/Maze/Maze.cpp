@@ -219,28 +219,15 @@ namespace s21{
     }
 
     void Maze::setStartPosition(Point<float> p, float width, float height){
-        // if(verticalMatrix_.GetRows() == 0)
-        //     return;
-
         pathFinder_->setStartPosition(p, width / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
     void Maze::setEndPosition(Point<float> p, float widht, float height){
-        // if(verticalMatrix_.GetRows() == 0)
-        //     return;
-
         pathFinder_->setEndPosition(p, widht / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
     PathRenderConfig Maze::getPath(float width, float height){
-        // if(verticalMatrix_.GetRows() == 0)
-        //     return {};
-
         return pathFinder_->get( Point<float>{width, height} );
-
-        // PathRenderConfig conf = pathFinder_->getPath( Point<float>{width, height} );
-
-        // return conf;
     }
 
     void Maze::QPathFinding(Point<int> start, Point<int> end){
@@ -254,9 +241,6 @@ namespace s21{
     }
 
     void Maze::loadMazeForPathFinder(){
-        // if(verticalMatrix_.GetRows() == 0)
-        //     return ;
-
         int rows = verticalMatrix_.GetRows();
         int cols = verticalMatrix_.GetCols();
 
@@ -265,7 +249,7 @@ namespace s21{
 
         for (int i = 0; i < rows ; i++) {
             for (int j = 0; j < cols ; j++) {
-                matrix_(i * 2  ,j * 2 ) = '0'; // Проходы
+                matrix_(i * 2  ,j * 2 ) = '0';
 
                 if (j < cols - 1)
                     matrix_(i * 2  , j * 2 + 1) = verticalMatrix_(i, j);
