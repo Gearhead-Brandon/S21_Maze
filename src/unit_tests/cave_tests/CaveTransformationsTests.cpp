@@ -102,10 +102,6 @@ TEST_F(CaveTransformationsTests, OneStepTransformationsCave) {
 
   EXPECT_EQ(field.size(), expectedField.size());  
   EXPECT_EQ(field, expectedField);
-
-//    for(auto& rect : field){
-//         std::cout << "{ " << rect.x << ", " << rect.y << ", " << rect.width << ", " << rect.height << "}," << std::endl;
-//    }
 }
 
 TEST_F(CaveTransformationsTests, MaxTransformationCave) {

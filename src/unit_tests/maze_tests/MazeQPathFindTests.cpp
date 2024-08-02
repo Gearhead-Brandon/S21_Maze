@@ -32,10 +32,6 @@ TEST_F(MazeQPathFindTests, MazeQPathFindTest){
   EXPECT_EQ(config.points_.size(), expectedPoints.size());
   EXPECT_EQ(config.points_, expectedPoints);
 
-    // for(const Rect& point : config.points_){
-    //     std::cout << "{" << point.x << " " << point.y << " " << point.width << " " << point.height << "}, " << std::endl;
-    // }
-
   std::vector<Line> expectedPath = {
     {437.5, 437.5, 312.5, 437.5},
     {312.5, 437.5, 312.5, 437.5},
@@ -57,10 +53,6 @@ TEST_F(MazeQPathFindTests, MazeQPathFindTest){
 
   EXPECT_EQ(config.path_.size(), expectedPath.size());
   EXPECT_EQ(config.path_, expectedPath);
-
-//   for(auto line : config.path_){
-//     std::cout << "{" << line.begin.col << ", " << line.begin.row << ", " << line.end.col << ", " << line.end.row << "}," << std::endl;
-//   }
 }
 
 TEST_F(MazeQPathFindTests, IsolatedMazeTest){

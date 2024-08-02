@@ -35,16 +35,7 @@ TEST_F(MazeLoadTests, MazeLoadTest) {
         {125, 375, 250, 375},
         {375, 375, 500, 375}
     };
-
-    // for(auto line : expectedLines){
-    //     std::cout << "{" << line.begin.col << ", " << line.begin.row << ", " << line.end.col << ", " << line.end.row << "}," << std::endl;
-    // }
-    // std::cout << std::endl;
-
-    // for(auto line : lines){
-    //     std::cout << "{" << line.begin.col << ", " << line.begin.row << ", " << line.end.col << ", " << line.end.row << "}," << std::endl;
-    // }
-
+    
     EXPECT_EQ(lines.size(), expectedLines.size());
     EXPECT_EQ(lines, expectedLines);
 }

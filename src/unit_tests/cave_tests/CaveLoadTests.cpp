@@ -64,10 +64,6 @@ TEST_F(CaveLoadTests, LoadCave) {
 
   EXPECT_EQ(field.size(), expectedField.size());
   EXPECT_EQ(field, expectedField);
-
-//   for(auto& rect : field){
-//     std::cout << "{ " << rect.x << ", " << rect.y << ", " << rect.width << ", " << rect.height << "}," << std::endl;
-//   }
 }
 
 TEST_F(CaveLoadTests, IncorrectCaveSize) {

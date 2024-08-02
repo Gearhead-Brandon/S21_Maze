@@ -1,3 +1,8 @@
+/**
+ * @file Maze.cpp
+ * @brief Implementation of the class Maze
+ */
+
 #include "Maze.h"
 #include "../FileReader/FileReader.h"
 #include <fstream>
@@ -7,15 +12,27 @@
 #include <iostream>
 
 namespace s21{
+
+    /**
+     * @brief Default constructor
+     */
     Maze::Maze() 
         : verticalMatrix_()
         , horizontalMatrix_()
         , pathFinder_(new PathFinder()){}
 
+    /**
+     * @brief Default destructor
+     */
     Maze::~Maze() {
         delete pathFinder_;
     }
 
+    /**
+     * @brief Load maze from file
+     * @param path - path to the file
+     * @return Operation result
+     */
     OpResult Maze::load(const std::string &path){
         FileReader reader(path);
         if (!reader.file.is_open())
@@ -81,11 +98,20 @@ namespace s21{
         return {true, ""};
     }
 
+    /**
+     * @brief Clear the maze
+     */
     void Maze::clear(){
         verticalMatrix_.Resize(0, 0);
         horizontalMatrix_.Resize(0, 0);
     }
 
+    /**
+     * @brief Generate maze
+     * @param rows - number of rows
+     * @param cols - number of columns
+     * @return Operation result
+     */
     OpResult Maze::generate(int rows, int cols){
         if ((rows <= 0 || cols <= 0) || (rows > 50 || cols > 50))
             return {false, "Incorrect maze size"};
@@ -103,6 +129,9 @@ namespace s21{
         return result;
     }
 
+    /**
+     * @brief Save the maze to file
+     */
     void Maze::save(){
         static std::size_t mazeCounter = 0;
 
@@ -124,6 +153,9 @@ namespace s21{
         file.close();
     }
 
+    /**
+     * @brief Load maze for path finder
+     */
     void Maze::loadMatrixToFile(const S21Matrix<char> &matrix, std::ofstream &file, bool eof){
         int rows = matrix.GetRows();
         int cols = matrix.GetCols();
@@ -141,6 +173,12 @@ namespace s21{
         }
     }
 
+    /**
+     * @brief Get the path
+     * @param width - width of the area
+     * @param height - height of the area
+     * @return Vector of walls
+     */
     std::vector<Line> Maze::get(float width, float height){
         float rows = verticalMatrix_.GetRows();
         float cols = verticalMatrix_.GetCols();
@@ -181,18 +219,39 @@ namespace s21{
         return lines;
     }
 
+    /**
+     * @brief Set the start position of the path
+     * @param p - start position
+     * @param width - width of the area
+     * @param height - height of the area
+     */
     void Maze::setStartPosition(Point<float> p, float width, float height){
         pathFinder_->setStartPosition(p, width / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
+    /**
+     * @brief Set the end position of the path
+     * @param p - end position
+     * @param width - width of the area
+     * @param height - height of the area
+     */
     void Maze::setEndPosition(Point<float> p, float widht, float height){
         pathFinder_->setEndPosition(p, widht / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
+    /**
+     * @brief Get the maze path
+     */
     PathRenderConfig Maze::getPath(float width, float height){
         return pathFinder_->get( Point<float>{width, height} );
     }
 
+    /**
+     * @brief Find the path through the Q-Learning algorithm
+     * @param start - start position
+     * @param end - end position
+     * @return Operation result
+     */
     OpResult Maze::QPathFinding(Point<int> start, Point<int> end){
         OpResult result = pathFinder_->QPathFinding(start, end);
 
@@ -202,11 +261,20 @@ namespace s21{
         return result;
     }
 
+    /**
+     * @brief Clear the path
+     */
     void Maze::clearPath(){
         pathFinder_->reset();
         Observable::notifyUpdate();
     }
 
+    /**
+     * @brief Save the matrix to file
+     * @param matrix - matrix
+     * @param path - path to the file
+     * @param eof - end of file
+     */
     void Maze::loadMazeForPathFinder(){
         int rows = verticalMatrix_.GetRows();
         int cols = verticalMatrix_.GetCols();

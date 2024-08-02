@@ -1,3 +1,8 @@
+/**
+ * @file Cave.cpp
+ * @brief The implementation of the class Cave
+ */
+
 #include "Cave.h"
 #include "../FileReader/FileReader.h"
 #include <fstream>
@@ -8,8 +13,16 @@
 
 namespace s21{
 
+    /**
+     * @brief Default constructor
+     */
     Cave::Cave() : caveMatrix_() {}
 
+    /**
+     * @brief The load method cave from file
+     * @param path - path to the file
+     * @return Operation result
+     */
     OpResult Cave::load(const std::string &path) {
         FileReader reader(path);
         if (!reader.file.is_open())
@@ -48,6 +61,13 @@ namespace s21{
         return {true, ""};
     }
 
+    /**
+     * @brief The generate method cave
+     * @param rows - number of rows
+     * @param cols - number of columns
+     * @param initChance - chance of initial living cells
+     * @return Operation result
+     */
     OpResult Cave::generate(int rows, int cols, int initChance){
         if(rows <= 0 || cols <= 0 || rows > 50 || cols > 50)
             return {false, "Incorrect cave size"};
@@ -72,6 +92,13 @@ namespace s21{
         return {true, ""};
     }
 
+    /**
+     * @brief Parameters check
+     * @param birthLimit - birth limit
+     * @param deathLimit - death limit
+     * @param time - time
+     * @return Operation result
+     */
     OpResult Cave::parametersCheck(int birthLimit, int deathLimit, int time){
         if(caveMatrix_.GetRows() < 1)
             return {false, "Cave is empty"};
@@ -85,6 +112,14 @@ namespace s21{
         return {true, ""};
     }
 
+    /**
+     * @brief The transform method cave
+     * @param full - is full transform or not
+     * @param birthLimit - birth limit
+     * @param deathLimit - death limit
+     * @param time - time in milliseconds
+     * @return Operation result
+     */
     OpResult Cave::transform(bool full, int birthLimit, int deathLimit, int time){
         if(OpResult res = parametersCheck(birthLimit, deathLimit, time); !res.IsSuccess())
             return res;
@@ -105,6 +140,11 @@ namespace s21{
         return {true, ""};
     }
 
+    /**
+     * @brief One step transform cave
+     * @param birthLimit - birth limit
+     * @param deathLimit - death limit 
+     */
     void Cave::oneStepTransform(int birthLimit, int deathLimit){
         int rows = caveMatrix_.GetRows();
         int cols = caveMatrix_.GetCols();
@@ -128,6 +168,13 @@ namespace s21{
         Observable::notifyUpdate();
     }
 
+    /**
+     * @brief Count living neighbors
+     * @param field - field
+     * @param row - row
+     * @param col - column
+     * @return Count of living neighbors
+     */
     int Cave::countLivingNeighbors(S21Matrix<char> field, int row, int col){
         int rows = caveMatrix_.GetRows();
         int cols = caveMatrix_.GetCols();
@@ -152,6 +199,12 @@ namespace s21{
         return count;
     }
 
+    /**
+     * @brief The get method cave
+     * @param width - width of the cave
+     * @param height - height of the cave
+     * @return Vector of cells
+     */
     std::vector<Rect> Cave::get(float width, float height){
         float rows = caveMatrix_.GetRows();
         float cols = caveMatrix_.GetCols();
