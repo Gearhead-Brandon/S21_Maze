@@ -15,12 +15,8 @@ namespace s21{
     }
 
     void PathFinder::setStartPosition(Point<float> start, float wRatio, float hRatio){
-        //if(start.col > 0.0f  && start.row > 0.0f && start.col != start_.col && start.row != start_.row){
-            // int rowIndex = floor(start_.y / (height / rows));
-            // int colIndex = floor(start_.x / (width / cols));
-
-        float x = start.col;
         float y = start.row;
+        float x = start.col;
 
         int rowIndex = y / hRatio;
         int colIndex = x / wRatio;
@@ -29,25 +25,10 @@ namespace s21{
 
         start_ = {colIndex, rowIndex};
 
-        //std::cout << "start_ = " << start_.row << " " << start_.col << std::endl;
-
-        // try{
-        //     if(end_.col > -1 && end_.row > -1)
-        //         findPathAStar();
-        // }catch(const OpResult& e){
-        //     start_ = copy;
-        //     throw e;
-        // }
-
         findPath(start_, end_, copy);
-        //}
     }
 
     void PathFinder::setEndPosition(Point<float> end, float wRatio, float hRatio){
-        //if(end.col > 0  && end.row > 0 && end.col != end_.col && end.row != end_.row){
-            // int rowIndex = floor(end_.y / (height / rows));
-            // int colIndex = floor(end_.x / (width / cols))
-
         float x = end.col;
         float y = end.row;
 
@@ -58,18 +39,7 @@ namespace s21{
 
         end_ = {colIndex, rowIndex};
 
-        //std::cout << "end_ = " << end_.row << " " << end_.col << std::endl;
-
-        // try{
-        //     if(start_.col > -1 && start_.row > -1)
-        //         findPathAStar();
-        // }catch(const OpResult& e){
-        //     end_ = copy;
-        //     throw e;
-        // }
-
         findPath(end_, start_, copy);
-        //}
     }
 
     void PathFinder::findPath(
@@ -197,24 +167,18 @@ namespace s21{
         // Стоимость горизонтального/вертикального перехода
         int straightCost = 1;
 
-        // Стоимость диагонального перехода (может быть больше)
-        //int diagonalCost = isDiagonal ? 1.4142 : 2;
-
         // Расчет стоимости перехода
         int g = 0;
         if (current.col == next.col)
             g = straightCost * std::abs(current.row - next.row);
         else if (current.row == next.row) 
             g = straightCost * std::abs(current.col - next.col);
-        // } else {
-        //     g = diagonalCost * std::min(std::abs(current.col - next.col), std::abs(current.row - next.row));
-        // }
 
         return g;
     }
 
     int PathFinder::calculateHeuristic(Point<int> point, Point<int> goal) {
-        // Расстояние по Манхэттэну
+        // Distance in Manhattan
         int dx = std::abs(point.col - goal.col);
         int dy = std::abs(point.row - goal.row);
 
@@ -340,11 +304,8 @@ namespace s21{
         if(r < epsilon){
             std::uniform_int_distribution<int> action_dis(0, state.qValues.size() - 1);
             return static_cast<Action>(action_dis(gen));
-        }else{
-            // auto max = std::max_element(state.qValues.begin(), state.qValues.end());
-            // return static_cast<Action>(std::distance(state.qValues.begin(), max));
+        }else
             return selectMaxAction(qTable, currentPos);
-        }
     }
 
     Point<int> PathFinder::getNextPoint(Point<int> current, Action action){
@@ -390,11 +351,9 @@ namespace s21{
         auto& nextState = qTable[next.row][next.col];
         float maxQNext = *std::max_element(nextState.qValues.begin(), nextState.qValues.end()); 
 
-        // state.qValues[index] = state.qValues[index] + alpha * (reward + gamma * maxQNext - state.qValues[index]);
         float tg_target = reward + gamma * maxQNext;
         float tg_error = tg_target - state.qValues[index];
         qTable[currentState.row][currentState.col].qValues[index] += alpha * tg_error;
-        //state.qValues[index] = (1-alpha) * state.qValues[index] + alpha * (reward + gamma * maxQNext - state.qValues[index]);
     }
 
     int PathFinder::getEpisodesCount(){
@@ -413,15 +372,13 @@ namespace s21{
         return rows * 2 * 100;
     }
 
-    void PathFinder::QPathFinding(Point<int> start, Point<int> goal){
+    OpResult PathFinder::QPathFinding(Point<int> start, Point<int> goal){
         int rows = maze_.GetRows() / 2;
         int cols = maze_.GetCols() / 2;
         
         if( start.col < 0 || start.col >= cols || start.row < 0 || start.row >= rows ||
-            goal.col < 0  || goal.col >= cols  || goal.row < 0  || goal.row >= rows){
-            std::cout << "Incorrect maze size" << std::endl;
-            return;
-        }
+            goal.col < 0  || goal.col >= cols  || goal.row < 0  || goal.row >= rows)
+            return {false, "Incorrect point"};
 
         QTable qTable(maze_.GetRows(), std::vector<QActions>(maze_.GetCols(), QActions()));
         
@@ -440,25 +397,22 @@ namespace s21{
         float decay_rate = 0.01f;
         float epsilon = 0.0f;
 
-        //int numEpisodes = 10'000; // 11000
         int numEpisodes = getEpisodesCount();
 
-        S21Matrix<char> copy = maze_;
+        // S21Matrix<char> copy = maze_;
 
-        std::cout << std::endl;
-        for(int i = 0; i < copy.GetRows() ; i++){
-            for(int j = 0; j < copy.GetCols() ; j++){
-                if(copy(i,j) == '1')
-                    std::cout << "* ";
-                else if(copy(i,j) == '2')
-                    std::cout << "X ";
-                else if(copy(i,j) == '0')
-                    std::cout << "@ ";
-            }
-            std::cout << std::endl;
-        }
-
-        std::cout << "COUNT EPISODES = " << numEpisodes << std::endl;
+        // std::cout << std::endl;
+        // for(int i = 0; i < copy.GetRows() ; i++){
+        //     for(int j = 0; j < copy.GetCols() ; j++){
+        //         if(copy(i,j) == '1')
+        //             std::cout << "* ";
+        //         else if(copy(i,j) == '2')
+        //             std::cout << "X ";
+        //         else if(copy(i,j) == '0')
+        //             std::cout << "@ ";
+        //     }
+        //     std::cout << std::endl;
+        // }
 
         for(int episode = 0; episode < numEpisodes; episode++){
             Point<int> currentState = start;
@@ -479,25 +433,13 @@ namespace s21{
             }
 
             epsilon = e_initial * exp(-decay_rate * episode );
-            //std::cout << "episode = " << episode << " | counter = " << counter << std::endl;
         }
 
-        buildQPath(qTable);
+        return buildQPath(qTable);
     }
 
-    void PathFinder::buildQPath(const QTable& qTable){
-        std::cout << "buildQPath" << std::endl;
+    OpResult PathFinder::buildQPath(const QTable& qTable){
         int count = 0;
-
-        // std::cout << "START = " << start_.row << " " << start_.col << std::endl;
-        // std::cout << "END_ = " << end_.row << " " << end_.col << std::endl;
-        // std::cout << std::endl;
-
-        // for(int i = 0; i < maze_.GetRows(); i++)
-        //     for(int j = 0; j < maze_.GetCols(); j++){
-        //         std::cout << i << " " << j << std::endl;
-        //         std::cout << "L: " << qTable[i][j].qValues[0] << " U: " << qTable[i][j].qValues[1] << " R: " << qTable[i][j].qValues[2] << " D: " << qTable[i][j].qValues[3] << std::endl;
-        //     }
 
         Point<int> current = start_;
         Point<int> end = end_;
@@ -505,37 +447,26 @@ namespace s21{
         end.col *= 2;
         end.row *= 2;
 
-        std::cout << "START = " << start_.row*2 << " " << start_.col*2 << std::endl;
-        std::cout << "END = " << end.row << " " << end.col << std::endl;
-
         current.col *= 2;
         current.row *= 2;
 
         std::map<Point<int>, Point<int>> parent;
 
-        //int r = 0;
-
         while(current != end){
-            //r++;
             Action action = selectMaxAction(qTable, current);
 
             Point<int> next = getNextPoint(current, action);
 
             parent[next] = current;
 
-            // std::cout << "Current: " << current.row << " " << current.col << std::endl;
-            // std::cout << "Next: " << next.row << " " << next.col << std::endl;
-
             current = next;
 
-            if(count++ > 5000000){ 
-                std::cout << "BREAK" << std::endl;
-                break;
-            }
+            if(count++ > 40000)
+                return {false, "Path not found. Probably the labyrinth has isolated study areas"};
         }
 
         reconstructPath(parent, {start_.col * 2 , start_.row * 2}, end);
 
-        std::cout << "buildQPath END" << std::endl;
+        return {true, ""};
     }
 }

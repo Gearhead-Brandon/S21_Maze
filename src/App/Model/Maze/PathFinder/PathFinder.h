@@ -31,7 +31,7 @@ namespace s21{
 
         void setMaze(S21Matrix<char>&& maze);
 
-        void QPathFinding(Point<int> start, Point<int> goal);
+        OpResult QPathFinding(Point<int> start, Point<int> goal);
 
         void reset();
     
@@ -63,7 +63,7 @@ namespace s21{
 
         int getEpisodesCount();
 
-        void buildQPath(const QTable& qTable);
+        OpResult buildQPath(const QTable& qTable);
 
         void findPath(Point<int>& first, Point<int> second, Point<int> copy);
     };

@@ -76,43 +76,6 @@ namespace s21{
 
         loadMazeForPathFinder();
 
-        // S21Matrix<char> matrix_(rows * 2 + 1, cols * 2 + 1);
-        // matrix_.FillNumbers('1');
-
-        // for(int i = 0; i < rows; i++){
-        //     for(int j = 0; j < cols; j++){
-
-        //         matrix_(i * 2 + 1,j * 2 + 1) = '0'; // Проходы
-
-        //         // Вертикальные стены справа
-        //         if(j < cols - 1)
-        //             matrix_(i * 2 + 1,j * 2 + 2) = verticalMatrix_(i,j);
-
-        //         // Горизонтальные стены снизу
-        //         if(i < rows - 1)
-        //             matrix_(i * 2 + 2,j * 2 + 1) = horizontalMatrix_(i,j);
-
-        //         if(i == 0)
-        //             matrix_(i * 2,j * 2) = '1'; // Верхняя стена
-
-        //         if(j == 0)
-        //             matrix_(i * 2,j * 2) = '1'; // Левая стена
-        //     }
-        // }
-
-        // std::cout << std::endl;
-        // for(int i = 0; i < matrix_.GetRows(); i++){
-        //     for(int j = 0; j < matrix_.GetCols(); j++){
-        //         if(matrix_(i,j) == '1')
-        //             std::cout << "* ";
-        //         else
-        //             std::cout << "  ";
-        //     }
-        //     std::cout << std::endl;
-        // }
-
-        //reader.file.close();
-
         Observable::notifyUpdate();
 
         return {true, ""};
@@ -230,9 +193,13 @@ namespace s21{
         return pathFinder_->get( Point<float>{width, height} );
     }
 
-    void Maze::QPathFinding(Point<int> start, Point<int> end){
-        pathFinder_->QPathFinding(start, end);
-        Observable::notifyUpdate();
+    OpResult Maze::QPathFinding(Point<int> start, Point<int> end){
+        OpResult result = pathFinder_->QPathFinding(start, end);
+
+        if(result.IsSuccess())
+            Observable::notifyUpdate();
+
+        return result;
     }
 
     void Maze::clearPath(){
@@ -260,17 +227,5 @@ namespace s21{
         }
 
         pathFinder_->setMaze(std::move(matrix_));
-
-        // std::cout << std::endl;
-        // for(int i = 0; i < matrix_.GetRows() ; i++){
-        //     for(int j = 0; j < matrix_.GetCols() ; j++){
-        //         if(matrix_(i,j) == '1')
-        //             std::cout << "*";
-        //         else
-        //             std::cout << "@";
-        //     }
-        //     std::cout << std::endl;
-        // }
     }
-
 }

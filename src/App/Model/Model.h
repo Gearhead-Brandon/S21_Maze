@@ -33,7 +33,7 @@ namespace s21{
         void setStartPosition(Point<float> p, float width, float height);
         void setEndPosition(Point<float> p, float widht, float height);
 
-        void QPathFinding(Point<int> start, Point<int> goal);
+        OpResult QPathFinding(Point<int> start, Point<int> goal);
 
         void clearPath();
     };

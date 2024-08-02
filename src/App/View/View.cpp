@@ -467,7 +467,10 @@ QLayout* View::createFindPathLayout(){
         int endRow = endRowEdit->toPlainText().toInt();
         int endCol = endColEdit->toPlainText().toInt();
 
-        model_.QPathFinding({startCol, startRow}, {endCol, endRow});
+        OpResult res = model_.QPathFinding({startCol, startRow}, {endCol, endRow});
+
+        if (!res.IsSuccess())
+            showErrorMessage(res.getErrorMessage().c_str());
     });
 
     QLabel* infoLabel = new QLabel(
