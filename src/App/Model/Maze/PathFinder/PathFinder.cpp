@@ -7,7 +7,7 @@
 
 namespace s21{
 
-    PathFinder::PathFinder() : start_({-1, -1}), end_({-1, -1}), path_(){}
+    PathFinder::PathFinder() : start_({-1, -1}), end_({-1, -1}), path_(), maze_(){}
 
     void PathFinder::setMaze(S21Matrix<char>&& maze){
         reset();
@@ -15,56 +15,77 @@ namespace s21{
     }
 
     void PathFinder::setStartPosition(Point<float> start, float wRatio, float hRatio){
-        if(start.col > 0.0f  && start.row > 0.0f && start.col != start_.col && start.row != start_.row){
+        //if(start.col > 0.0f  && start.row > 0.0f && start.col != start_.col && start.row != start_.row){
             // int rowIndex = floor(start_.y / (height / rows));
             // int colIndex = floor(start_.x / (width / cols));
 
-            float x = start.col;
-            float y = start.row;
+        float x = start.col;
+        float y = start.row;
 
-            int rowIndex = y / hRatio;
-            int colIndex = x / wRatio;
+        int rowIndex = y / hRatio;
+        int colIndex = x / wRatio;
 
-            Point<int> copy = start_;
+        Point<int> copy = start_;
 
-            start_ = {colIndex, rowIndex};
+        start_ = {colIndex, rowIndex};
 
-            std::cout << "start_ = " << start_.row << " " << start_.col << std::endl;
+        //std::cout << "start_ = " << start_.row << " " << start_.col << std::endl;
 
-            try{
-                if(end_.col > -1 && end_.row > -1)
-                    findPathAStar();
-            }catch(const OpResult& e){
-                start_ = copy;
-                throw e;
-            }
-        }
+        // try{
+        //     if(end_.col > -1 && end_.row > -1)
+        //         findPathAStar();
+        // }catch(const OpResult& e){
+        //     start_ = copy;
+        //     throw e;
+        // }
+
+        findPath(start_, end_, copy);
+        //}
     }
 
     void PathFinder::setEndPosition(Point<float> end, float wRatio, float hRatio){
-        if(end.col > 0  && end.row > 0 && end.col != end_.col && end.row != end_.row){
+        //if(end.col > 0  && end.row > 0 && end.col != end_.col && end.row != end_.row){
             // int rowIndex = floor(end_.y / (height / rows));
             // int colIndex = floor(end_.x / (width / cols))
 
-            float x = end.col;
-            float y = end.row;
+        float x = end.col;
+        float y = end.row;
 
-            int rowIndex = y / hRatio;
-            int colIndex = x / wRatio;
+        int rowIndex = y / hRatio;
+        int colIndex = x / wRatio;
 
-            Point<int> copy = end_;
+        Point<int> copy = end_;
 
-            end_ = {colIndex, rowIndex};
+        end_ = {colIndex, rowIndex};
 
-            std::cout << "end_ = " << end_.row << " " << end_.col << std::endl;
+        //std::cout << "end_ = " << end_.row << " " << end_.col << std::endl;
 
-            try{
-                if(start_.col > -1 && start_.row > -1)
-                    findPathAStar();
-            }catch(const OpResult& e){
-                end_ = copy;
-                throw e;
-            }
+        // try{
+        //     if(start_.col > -1 && start_.row > -1)
+        //         findPathAStar();
+        // }catch(const OpResult& e){
+        //     end_ = copy;
+        //     throw e;
+        // }
+
+        findPath(end_, start_, copy);
+        //}
+    }
+
+    void PathFinder::findPath(
+        Point<int>& first, 
+        Point<int> second, 
+        Point<int> copy){
+        
+        if(!maze_.GetRows() || !maze_.GetCols())
+            return;
+
+        try{
+            if(second.col > -1 && second.row > -1)
+                findPathAStar();
+        }catch(const OpResult& e){
+            first = copy;
+            throw e;
         }
     }
 
@@ -75,32 +96,34 @@ namespace s21{
     }
 
     void PathFinder::setPointToPath(Point<int> el, PathRenderConfig& config, Point<float> areaSize){
-        if(el.row > -1 && el.col > -1){
-            int width = areaSize.col;
-            int height = areaSize.row;
+        if(!(el.row > -1 && el.col > -1))
+            return;
 
-            int rows = maze_.GetRows() / 2;
-            int cols = maze_.GetCols() / 2;
+        int width = areaSize.col;
+        int height = areaSize.row;
 
-            // Рассчитать базовый размер клетки
-            float baseCellSize = std::min(width / cols, height / rows);
-            float squareSize = baseCellSize / 4;  // Размер квадрата начальной точки
+        int rows = maze_.GetRows() / 2;
+        int cols = maze_.GetCols() / 2;
 
-            // Рассчитать масштабирование для каждого измерения
-            float scaleFactorX = width / (baseCellSize * cols);
-            float scaleFactorY = height / (baseCellSize * rows);
+        // Рассчитать базовый размер клетки
+        float baseCellSize = std::min(width / cols, height / rows);
+        float squareSize = baseCellSize / 4;  // Размер квадрата начальной точки
 
-            int colIndex = el.col;
-            int rowIndex = el.row;
+        // Рассчитать масштабирование для каждого измерения
+        float scaleFactorX = width / (baseCellSize * cols);
+        float scaleFactorY = height / (baseCellSize * rows);
 
-            // Рассчитать центральные координаты клетки с центрированием
-            float centerX = (colIndex + 0.5f) * baseCellSize * scaleFactorX;
-            float centerY = (rowIndex + 0.5f) * baseCellSize * scaleFactorY;
+        int colIndex = el.col;
+        int rowIndex = el.row;
 
-            // Создать квадрат начальной точки в центре клетки
-            config.points_.push_back({centerX - squareSize / 2, centerY - squareSize / 2,
-                                        squareSize, squareSize});
-        }
+        // Рассчитать центральные координаты клетки с центрированием
+        float centerX = (colIndex + 0.5f) * baseCellSize * scaleFactorX;
+        float centerY = (rowIndex + 0.5f) * baseCellSize * scaleFactorY;
+
+        // Создать квадрат начальной точки в центре клетки
+        config.points_.push_back({centerX - squareSize / 2, centerY - squareSize / 2,
+                                    squareSize, squareSize});
+        //}
     }
 
     PathRenderConfig PathFinder::get(Point<float> areaSize){
@@ -108,15 +131,15 @@ namespace s21{
         int cols = maze_.GetCols() / 2;
 
         if((start_.col >= cols || start_.row >= rows) || (end_.col >= cols || end_.row >= rows))
-            return {};
+            return {};      
 
         PathRenderConfig config;
 
         setPointToPath(start_, config, areaSize);
         setPointToPath(end_, config, areaSize);
 
-        if(start_.col > -1 && start_.row > -1 && end_.col > -1 && end_.row > -1)
-            fillPath(config, areaSize);
+        //if(start_.col > -1 && start_.row > -1 && end_.col > -1 && end_.row > -1)
+        fillPath(config, areaSize);
 
         return config;
     }
@@ -125,7 +148,7 @@ namespace s21{
         PathRenderConfig& config,
         Point<float> areaSize){
 
-        if(path_.empty()) 
+        if(path_.empty())
             return;
         
         int rows = maze_.GetRows() / 2;
@@ -157,8 +180,7 @@ namespace s21{
         }
     }
 
-
-    bool PathFinder::isValid(int x, int y) {
+    bool PathFinder::isNotWall(int x, int y) {
         const int rows = maze_.GetRows();
         const int cols = maze_.GetCols();
 
@@ -180,9 +202,9 @@ namespace s21{
 
         // Расчет стоимости перехода
         int g = 0;
-        if (current.col == next.col) {
+        if (current.col == next.col)
             g = straightCost * std::abs(current.row - next.row);
-        } else if (current.row == next.row) 
+        else if (current.row == next.row) 
             g = straightCost * std::abs(current.col - next.col);
         // } else {
         //     g = diagonalCost * std::min(std::abs(current.col - next.col), std::abs(current.row - next.row));
@@ -243,7 +265,7 @@ namespace s21{
 
                 Point<int> next = {current.col + dx, current.row + dy};
 
-                if (isValid(next.col, next.row) && !visited.count(next)) {
+                if (isNotWall(next.col, next.row) && !visited.count(next)) {
                     int g_new = calculateG(current, next) + calculateG(start, current);
                     int h_new = calculateHeuristic(next, goal);
                     int f_new = g_new + h_new;
@@ -349,7 +371,7 @@ namespace s21{
         if(next == goal){
             done = true;
             return 10.0f;
-        }else if(!isValid(next.col, next.row)){
+        }else if(!isNotWall(next.col, next.row)){
             done = true;
             next = current;
             return -10.0f;

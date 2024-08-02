@@ -3,10 +3,10 @@
 
 namespace s21{
     FileReader::FileReader(const std::string &path) 
-        : file(path), is_open(file.is_open()) {}
+        : file(path){}
 
     FileReader::~FileReader() {
-        if(is_open)
+        if(file.is_open())
             file.close();
     }
 }

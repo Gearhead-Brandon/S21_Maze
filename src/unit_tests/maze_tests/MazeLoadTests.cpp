@@ -1,5 +1,5 @@
-#include "../App/Model/Maze/Maze.h"
-#include "Tests.h"
+#include "../../App/Model/Maze/Maze.h"
+#include "../Tests.h"
 
 using namespace s21;
 
@@ -13,7 +13,7 @@ protected:
 
 TEST_F(MazeLoadTests, MazeLoadTest) {
     // Act
-    OpResult result = maze_.load("test_files/test_maze_4_4.txt");
+    OpResult result = maze_.load("test_files/maze/test_maze_4_4.txt");
     std::vector<Line> lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -51,7 +51,7 @@ TEST_F(MazeLoadTests, MazeLoadTest) {
 
 TEST_F(MazeLoadTests, IncorrectMazeSize) {
     // Act
-    OpResult result = maze_.load("test_files/incorrect_size/IS_rows_less_0.txt");
+    OpResult result = maze_.load("test_files/maze/incorrect_size/IS_rows_less_0.txt");
     std::vector<Line> lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -62,7 +62,7 @@ TEST_F(MazeLoadTests, IncorrectMazeSize) {
 
 
     // Act
-    result = maze_.load("test_files/incorrect_size/IS_cols_less_0.txt");
+    result = maze_.load("test_files/maze/incorrect_size/IS_cols_less_0.txt");
     lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -73,7 +73,7 @@ TEST_F(MazeLoadTests, IncorrectMazeSize) {
 
 
     // Act
-    result = maze_.load("test_files/incorrect_size/IS_cols_more_50.txt");
+    result = maze_.load("test_files/maze/incorrect_size/IS_cols_more_50.txt");
     lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -84,7 +84,7 @@ TEST_F(MazeLoadTests, IncorrectMazeSize) {
 
 
     // Act
-    result = maze_.load("test_files/incorrect_size/IS_rows_more_50.txt");
+    result = maze_.load("test_files/maze/incorrect_size/IS_rows_more_50.txt");
     lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -96,7 +96,7 @@ TEST_F(MazeLoadTests, IncorrectMazeSize) {
 
 TEST_F(MazeLoadTests, InvalidMazeData) {
     // Act
-    OpResult result = maze_.load("test_files/invalid_maze_data/invalid_data_v.txt");
+    OpResult result = maze_.load("test_files/maze/invalid_maze_data/invalid_data_v.txt");
     std::vector<Line> lines = std::move(maze_.get(500, 500));
 
     // Assert
@@ -107,7 +107,7 @@ TEST_F(MazeLoadTests, InvalidMazeData) {
 
 
     // Act
-    result = maze_.load("test_files/invalid_maze_data/invalid_data_h.txt");
+    result = maze_.load("test_files/maze/invalid_maze_data/invalid_data_h.txt");
     lines = std::move(maze_.get(500, 500));
 
     // Assert

@@ -40,12 +40,12 @@ namespace s21{
         return maze_->generate(rows, cols);
     }
 
-    OpResult Model::transformCave(int birthLimit, int deathLimit){
-        return cave_->transform(birthLimit, deathLimit);
-    }
+    // OpResult Model::transformCave(int birthLimit, int deathLimit){
+    //     return cave_->transform(birthLimit, deathLimit);
+    // }
 
-    OpResult Model::transformCave(int birthLimit, int deathLimit, int time){
-        return cave_->transform(birthLimit, deathLimit, time);
+    OpResult Model::transformCave(bool full, int birthLimit, int deathLimit, int time){
+        return cave_->transform(full, birthLimit, deathLimit, time);
     }
 
     OpResult Model::loadCave(const std::string &path){

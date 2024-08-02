@@ -1,5 +1,5 @@
 #include "Maze.h"
-#include "FileReader/FileReader.h"
+#include "../FileReader/FileReader.h"
 #include <fstream>
 #include <sstream>
 #include <filesystem>
@@ -111,7 +111,7 @@ namespace s21{
         //     std::cout << std::endl;
         // }
 
-        reader.file.close();
+        //reader.file.close();
 
         Observable::notifyUpdate();
 
@@ -219,22 +219,22 @@ namespace s21{
     }
 
     void Maze::setStartPosition(Point<float> p, float width, float height){
-        if(verticalMatrix_.GetRows() == 0)
-            return;
+        // if(verticalMatrix_.GetRows() == 0)
+        //     return;
 
         pathFinder_->setStartPosition(p, width / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
     void Maze::setEndPosition(Point<float> p, float widht, float height){
-        if(verticalMatrix_.GetRows() == 0)
-            return;
+        // if(verticalMatrix_.GetRows() == 0)
+        //     return;
 
         pathFinder_->setEndPosition(p, widht / verticalMatrix_.GetCols(), height / verticalMatrix_.GetRows());
     }
 
     PathRenderConfig Maze::getPath(float width, float height){
-        if(verticalMatrix_.GetRows() == 0)
-            return {};
+        // if(verticalMatrix_.GetRows() == 0)
+        //     return {};
 
         return pathFinder_->get( Point<float>{width, height} );
 

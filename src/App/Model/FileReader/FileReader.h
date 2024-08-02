@@ -11,9 +11,6 @@ namespace s21{
         FileReader(const std::string &path);
 
         ~FileReader();
-
-    private:
-        bool is_open;
     };
 }
 

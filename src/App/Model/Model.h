@@ -24,8 +24,8 @@ namespace s21{
 
         OpResult loadCave(const std::string &path);
         OpResult generateCave(int rows, int cols, int initChance);
-        OpResult transformCave(int birthLimit, int deathLimit);
-        OpResult transformCave(int birthLimit, int deathLimit, int time);
+        //OpResult transformCave(int birthLimit, int deathLimit);
+        OpResult transformCave(bool full, int birthLimit, int deathLimit, int time);
         std::vector<Rect> getCave(float width, float height);
 
         PathRenderConfig getPath(float width, float height);

@@ -1,5 +1,5 @@
-#include "../App/Model/Maze/Maze.h"
-#include "Tests.h"
+#include "../../App/Model/Maze/Maze.h"
+#include "../Tests.h"
 
 using namespace s21;
 

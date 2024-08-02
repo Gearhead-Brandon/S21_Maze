@@ -353,7 +353,7 @@ QPushButton* View::createCaveOneStepButton(QTextEdit* BirthLimit, QTextEdit* Dea
         int birthLimit = BirthLimit->toPlainText().toInt();
         int deathLimit = DeathLimit->toPlainText().toInt();
 
-        OpResult res = model_.transformCave(birthLimit, deathLimit);
+        OpResult res = model_.transformCave(false, birthLimit, deathLimit, 0);
 
         if(!res.IsSuccess())
             showErrorMessage(res.getErrorMessage().c_str());
@@ -373,7 +373,7 @@ QPushButton* View::createCaveAutoButton(QTextEdit* BirthLimit, QTextEdit* DeathL
         int deathLimit = DeathLimit->toPlainText().toInt();
         int time = timeEdit->toPlainText().toInt();
 
-        OpResult res = model_.transformCave(birthLimit, deathLimit, time);
+        OpResult res = model_.transformCave(true, birthLimit, deathLimit, time);
 
         if(!res.IsSuccess())
             showErrorMessage(res.getErrorMessage().c_str());

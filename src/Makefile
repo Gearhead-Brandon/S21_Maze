@@ -11,7 +11,8 @@ HTML_REPORT = REPORT.html
 EXCLUDE_FILES = "unit_tests/*" "App/Common/Structures/*" "App/Model/S21Matrix"\
                 "App/Model/Maze/PathFinder/PathFinder.h"\
 				"App/Model/Maze/PathFinder/Components/QActions.h"\
-				"App/Model/Maze/FileReader/*"		
+				"App/Model/Cave/Cave.h"\
+				"App/Model/FileReader/*"		
 EXCLUDE_REPORT = $(foreach file, $(EXCLUDE_FILES), --exclude $(file)) 
 
 all: install

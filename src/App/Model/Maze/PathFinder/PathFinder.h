@@ -44,7 +44,7 @@ namespace s21{
 
         int calculateHeuristic(Point<int> point, Point<int> goal);
 
-        bool isValid(int x, int y);
+        bool isNotWall(int x, int y);
 
         void findPathAStar();
 
@@ -64,6 +64,8 @@ namespace s21{
         int getEpisodesCount();
 
         void buildQPath(const QTable& qTable);
+
+        void findPath(Point<int>& first, Point<int> second, Point<int> copy);
     };
 }
 #endif
