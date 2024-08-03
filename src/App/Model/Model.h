@@ -97,7 +97,7 @@ namespace s21{
          * @param height - height of the cave
          * @return Vector of cave cells
          */
-        std::vector<Rect> getCave(float width, float height);
+        std::vector<Rect> getCave(float width, float height) const;
 
         /**
          * @brief Get path

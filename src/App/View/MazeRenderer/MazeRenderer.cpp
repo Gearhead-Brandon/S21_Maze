@@ -1,7 +1,16 @@
+/**
+ * @file MazeRenderer.cpp
+ * @brief Implementation of the class MazeRenderer
+ */
+
 #include "MazeRenderer.h"
 
 namespace s21{
 
+    /**
+     * @brief Parametrized constructor
+     * @param model - storage of model
+     */
     MazeRenderer::MazeRenderer(Model& model) 
         : QWidget(nullptr)
         , model_(model)
@@ -10,28 +19,35 @@ namespace s21{
         setMinimumSize(500, 500);
     }
 
+    /**
+     * @brief Destructor
+     */
     MazeRenderer::~MazeRenderer(){
         delete maze_;
     }
 
-    // void MazeRenderer::changeArea(){
-    //     isMazeOrCave_ = !isMazeOrCave_;
-    //     std::cout << "changeArea = " << isMazeOrCave_ << std::endl;
-    //     repaint();
-    // }
-
+    /**
+     * @brief Paint the widget
+     * @param event - event
+     */
     void MazeRenderer::paintEvent(QPaintEvent *event){
         QPainter painter(this);
         painter.drawImage(0, 0, *maze_);
         painter.drawImage(0, 0, *path_);
     }
 
+    /**
+     * @brief Repaint the widget
+     */
     void MazeRenderer::update(){
         updateMaze();
         updatePath();
         repaint();
     }
 
+    /**
+     * @brief Update the image of the maze
+     */
     void MazeRenderer::updateMaze(){
         maze_->fill(QColor(255, 255, 255, 0));
 
@@ -48,6 +64,11 @@ namespace s21{
             painter.drawLine(QPointF{line.begin.col, line.begin.row}, QPointF{line.end.col, line.end.row});
     }
 
+    /**
+     * @brief Get the next color of the path
+     * @param segmentIndex - index of the segment
+     * @return - next color
+     */
     QColor MazeRenderer::getNextColor(int segmentIndex) {
         switch (segmentIndex) {
             case 0:
@@ -67,6 +88,9 @@ namespace s21{
         return Qt::darkMagenta;
     }
 
+    /**
+     * @brief Update the image of the path
+     */
     void MazeRenderer::updatePath(){
         path_->fill(QColor(255, 255, 255, 0));
 
@@ -113,21 +137,27 @@ namespace s21{
         }
     }
 
+    /**
+     * @brief Resize the widget
+     * @param event - event
+     */
     void MazeRenderer::resizeEvent(QResizeEvent *event){
         float w = width();
         float h = height();
 
         delete maze_;
         maze_ = new QImage(w, h, QImage::Format_ARGB32);
-        //updateMaze();
 
         delete path_;
         path_ = new QImage(w, h, QImage::Format_ARGB32);
-        //updatePath();
 
         update();
     }
 
+    /**
+     * @brief Mouse press event
+     * @param event - event
+     */
     void MazeRenderer::mousePressEvent(QMouseEvent* event){
         try{
             if(event->button() == Qt::LeftButton){

@@ -33,15 +33,23 @@ View::~View(){
     delete mazeRenderer_;
 }
 
+/**
+ * @brief Create main layout
+ * @return pointer to layout
+ */
 QHBoxLayout* View::createLayout(){
     QHBoxLayout* layout = new QHBoxLayout();
-;
+
     layout->addLayout(createDrawingAreaTab());
     layout->addLayout(createMenu());
 
     return layout;
 }
 
+/**
+ * @brief Create layout for drawing area
+ * @return pointer to layout
+ */
 QVBoxLayout* View::createDrawingAreaTab(){
     QTabWidget* tabs = new QTabWidget;
     tabs->addTab(caveRenderer_, "Cave");
@@ -67,6 +75,10 @@ QVBoxLayout* View::createDrawingAreaTab(){
     return vBox;
 }
 
+/**
+ * @brief Create layout for menu
+ * @return pointer to layout
+ */
 QVBoxLayout* View::createMenu(){
     QTabWidget* tabs = new QTabWidget;
     tabs->addTab(createCaveTab(), "Cave");
@@ -93,11 +105,13 @@ QVBoxLayout* View::createMenu(){
     return vBox;
 }
 
+/**
+ * @brief Create tab for maze
+ * @return pointer to tab
+ */
 QWidget* View::createMazeTab(){
     QVBoxLayout* box = new QVBoxLayout;
     box->setContentsMargins(20, 10, 20, 0);
-    //box->addWidget(createMazeLoadButton());
-    // box->setSpacing(20);
     box->addLayout(createMazeGenerateLayout());
     box->addStretch();
 
@@ -108,6 +122,10 @@ QWidget* View::createMazeTab(){
     return mazeTab;
 }
 
+/**
+ * @brief Create layout for maze generation
+ * @return pointer to layout
+ */
 QLayout* View::createMazeGenerateLayout(){
     QLabel* generateLabel = new QLabel("MAZE GENERATION SETTINGS"); 
     generateLabel->setStyleSheet("font-size: 18px;");
@@ -171,6 +189,10 @@ QLayout* View::createMazeGenerateLayout(){
     return vBox;
 }
 
+/**
+ * @brief Create button for load maze
+ * @return pointer to button
+ */
 QPushButton* View::createMazeLoadButton(){
     QPushButton* loadBtn = new QPushButton("LOAD");
     loadBtn->setStyleSheet("QPushButton { background-color:  #1c1a1a; color: #fcfcfc; font-size: 35px;} \
@@ -192,6 +214,10 @@ QPushButton* View::createMazeLoadButton(){
     return loadBtn;
 }
 
+/**
+ * @brief Create tab for cave
+ * @return pointer to tab
+ */
 QWidget* View::createCaveTab(){
     QVBoxLayout* box = new QVBoxLayout;
     box->setContentsMargins(20, 10, 20, 0);
@@ -205,6 +231,13 @@ QWidget* View::createCaveTab(){
     return mazeTab;
 }
 
+/**
+ * @brief Create button for cave generation
+ * @param Rows - text edit for rows
+ * @param Columns - text edit for columns
+ * @param initChance - text edit for initial chance
+ * @return pointer to button
+ */
 QPushButton* View::createGenCaveButton(QTextEdit* Rows, QTextEdit* Columns,
                                              QTextEdit* initChance){
     QPushButton* genCaveBtn = new QPushButton("GENERATE");
@@ -226,6 +259,10 @@ QPushButton* View::createGenCaveButton(QTextEdit* Rows, QTextEdit* Columns,
     return genCaveBtn;
 }
 
+/**
+ * @brief Create layout for work with cave
+ * @return pointer to layout
+ */
 QLayout* View::createCaveLayout(){
     QLabel* generateLabel = new QLabel("CAVE GENERATION SETTINGS"); 
     generateLabel->setStyleSheet("font-size: 18px;");
@@ -343,6 +380,12 @@ QLayout* View::createCaveLayout(){
     return vBox;
 }
 
+/**
+ * @brief Create button for one step cave transformation
+ * @param BirthLimit - text edit for birth limit
+ * @param DeathLimit - text edit for death limit
+ * @return pointer to button
+ */
 QPushButton* View::createCaveOneStepButton(QTextEdit* BirthLimit, QTextEdit* DeathLimit){
     QPushButton* oneStepCaveBtn = new QPushButton("ONE STEP");
     oneStepCaveBtn->setStyleSheet("QPushButton { background-color: #1c1a1a; color: #fcfcfc; font-size: 35px;} \
@@ -362,6 +405,13 @@ QPushButton* View::createCaveOneStepButton(QTextEdit* BirthLimit, QTextEdit* Dea
     return oneStepCaveBtn;
 }
 
+/**
+ * @brief Create button for auto cave transformation
+ * @param BirthLimit - text edit for birth limit
+ * @param DeathLimit - text edit for death limit
+ * @param timeEdit - text edit for time
+ * @return pointer to button
+ */
 QPushButton* View::createCaveAutoButton(QTextEdit* BirthLimit, QTextEdit* DeathLimit, QTextEdit* timeEdit){
     QPushButton* oneStepCaveBtn = new QPushButton("AUTO");
     oneStepCaveBtn->setStyleSheet("QPushButton { background-color: #1c1a1a; color: #fcfcfc; font-size: 35px;} \
@@ -382,6 +432,10 @@ QPushButton* View::createCaveAutoButton(QTextEdit* BirthLimit, QTextEdit* DeathL
     return oneStepCaveBtn;
 }
 
+/**
+ * @brief Create tab for find path
+ * @return pointer to tab
+ */
 QWidget* View::createFindPathTab(){
     QVBoxLayout* box = new QVBoxLayout;
     box->setContentsMargins(20, 10, 20, 0);
@@ -395,6 +449,10 @@ QWidget* View::createFindPathTab(){
     return findPathTab;
 }
 
+/**
+ * @brief Create layout for find path
+ * @return pointer to layout
+ */
 QLayout* View::createFindPathLayout(){
     QPushButton* clearBtn = new QPushButton("CLEAR");
     clearBtn->setStyleSheet("QPushButton { background-color: #1c1a1a; color: #fcfcfc; font-size: 35px;} \
@@ -504,14 +562,18 @@ QLayout* View::createFindPathLayout(){
     return vBox;
 }
 
+/**
+ * @brief Handle key press events
+ * @param event - key press event
+ */
 void View::keyPressEvent(QKeyEvent* event){
     if(event->key() == Qt::Key_Escape)
         QApplication::quit();
 }
 
 /**
- * @brief Show an error message
- * @param message The error message
+ * @brief Create message box with error message
+ * @param message - error message
  * @sa QMessageBox
  */
 void View::showErrorMessage(const char *message) {

@@ -1,7 +1,16 @@
+/**
+ * @file CaveRenderer.cpp
+ * @brief Implementation of the class CaveRenderer
+ */
+
 #include "CaveRenderer.h"
 
 namespace s21{
 
+    /**
+     * @brief Parametrized constructor
+     * @param model - storage of model
+     */
     CaveRenderer::CaveRenderer(Model& model) 
         : QWidget(nullptr)
         , model_(model)
@@ -9,20 +18,33 @@ namespace s21{
         setMinimumSize(500, 500);
     }
 
+    /**
+     * @brief Destructor
+     */
     CaveRenderer::~CaveRenderer(){
         delete cave_;
     }
 
+    /**
+     * @brief Paint the widget
+     * @param event - event
+     */
     void CaveRenderer::paintEvent(QPaintEvent *event){
         QPainter painter(this);
         painter.drawImage(0, 0, *cave_);
     }
 
+    /**
+     * @brief Repaint the widget
+     */
     void CaveRenderer::update(){
         updateCave();
         repaint();
     }
 
+    /**
+     * @brief Update the image of the cave
+     */
     void CaveRenderer::updateCave(){
         cave_->fill(QColor(255, 255, 255, 0));
 
@@ -39,6 +61,10 @@ namespace s21{
             painter.fillRect(QRectF{cell.x, cell.y, cell.width, cell.height}, Qt::black);
     }
 
+    /**
+     * @brief Resize the widget
+     * @param event - event
+     */
     void CaveRenderer::resizeEvent(QResizeEvent *event){
         float w = width();
         float h = height();

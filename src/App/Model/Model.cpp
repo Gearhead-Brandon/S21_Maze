@@ -109,7 +109,7 @@ namespace s21{
      * @param height - height of the cave
      * @return Vector of cave cells
      */
-    std::vector<Rect> Model::getCave(float width, float height){
+    std::vector<Rect> Model::getCave(float width, float height) const{
         return cave_->get(width, height);
     }
 
