@@ -6,8 +6,9 @@
 #ifndef OBSERVABLE_H
 #define OBSERVABLE_H
 
-#include "../IObserver.h"
 #include <vector>
+
+#include "../IObserver.h"
 
 namespace s21 {
 
@@ -19,11 +20,10 @@ namespace s21 {
  * observer if some data was changed.
  */
 class Observable {
-
   //! Storage of observers
   std::vector<IObserver *> _observers;
 
-public:
+ public:
   /**
    * @brief Adds an observer
    * @param observer Observer
@@ -36,6 +36,6 @@ public:
    */
   void notifyUpdate();
 };
-} // namespace s21
+}  // namespace s21
 
 #endif

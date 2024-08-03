@@ -103,8 +103,7 @@ void PathFinder::reset() {
  */
 void PathFinder::setPointToPath(Point<int> el, PathRenderConfig& config,
                                 Point<float> areaSize) {
-  if (!(el.row > -1 && el.col > -1)) 
-    return;
+  if (!(el.row > -1 && el.col > -1)) return;
 
   int width = areaSize.col;
   int height = areaSize.row;
@@ -112,22 +111,24 @@ void PathFinder::setPointToPath(Point<int> el, PathRenderConfig& config,
   int rows = maze_.GetRows() / 2;
   int cols = maze_.GetCols() / 2;
 
-  // Рассчитать базовый размер клетки
+  // Calculate the basic cell size
   float baseCellSize = std::min(width / cols, height / rows);
-  float squareSize = baseCellSize / 4;  // Размер квадрата начальной точки
 
-  // Рассчитать масштабирование для каждого измерения
+  // Set the size of the square to be 25% of the base cell size
+  float squareSize = baseCellSize / 4;
+
+  // Calculate scaling for each dimension
   float scaleFactorX = width / (baseCellSize * cols);
   float scaleFactorY = height / (baseCellSize * rows);
 
   int colIndex = el.col;
   int rowIndex = el.row;
 
-  // Рассчитать центральные координаты клетки с центрированием
+  // Calculate the central coordinates of a cell with centering
   float centerX = (colIndex + 0.5f) * baseCellSize * scaleFactorX;
   float centerY = (rowIndex + 0.5f) * baseCellSize * scaleFactorY;
 
-  // Создать квадрат начальной точки в центре клетки
+  // Create a dot square in the center of the cell
   config.points_.push_back({centerX - squareSize / 2, centerY - squareSize / 2,
                             squareSize, squareSize});
 }
@@ -174,7 +175,6 @@ void PathFinder::fillPath(PathRenderConfig& config, Point<float> areaSize) {
   float scaleFactorX = width / (baseCellSize * cols);
   float scaleFactorY = height / (baseCellSize * rows);
 
-  // Loop through path elements
   for (size_t i = 0; i < path_.size() - 1; ++i) {
     const Point<int> current = path_[i];
     const Point<int> next = path_[i + 1];
@@ -216,13 +216,10 @@ bool PathFinder::isNotWall(int x, int y) {
  * @return Cost
  */
 int PathFinder::calculateG(Point<int> current, Point<int> next) {
-  // Проверка, является ли переход диагональным
-  bool isDiagonal = (current.col != next.col) && (current.row != next.row);
-
-  // Стоимость горизонтального/вертикального перехода
+  // Cost of horizontal/vertical transition
   int straightCost = 1;
 
-  // Расчет стоимости перехода
+  // Calculating the cost of transition
   int g = 0;
   if (current.col == next.col)
     g = straightCost * std::abs(current.row - next.row);
@@ -253,25 +250,26 @@ void PathFinder::findPathAStar() {
   Point<int> start = start_;
   Point<int> goal = end_;
 
-  // Умножение на 2 для учета "расширенной" размерности (стены занимают 2 клетки)
+  // Multiply by 2 to account for the "extended" dimension (walls take up 2
+  // cells)
   start.col *= 2;
   start.row *= 2;
   goal.col *= 2;
   goal.row *= 2;
 
-  // Очередь приоритетов для узлов (пара: f-оценка, точка)
+  // Priority queue for nodes (pair: f-score, point)
   std::priority_queue<std::pair<int, Point<int>>,
                       std::vector<std::pair<int, Point<int>>>,
                       std::greater<std::pair<int, Point<int>>>>
       pq;
 
-  // Множество посещенных точек
+  // Set of visited points
   std::set<Point<int>> visited;
 
-  // Мап для хранения родительских узлов
+  // Map for storing the parent points
   std::map<Point<int>, Point<int>> parent;
 
-  // Начальная f-оценка (g = 0, h = эвристика)
+  // Initial f-score (g = 0, h = heuristic)
   int f_start = calculateHeuristic(start, goal);
   pq.push({f_start, start});
 
@@ -332,7 +330,8 @@ void PathFinder::reconstructPath(std::map<Point<int>, Point<int>>& parent,
     current = parent.at(current);
   }
 
-  path_.push_back(start);  // Add start point to the path
+  // Add start point to the path
+  path_.push_back(start);
 }
 
 /**
@@ -436,7 +435,8 @@ void PathFinder::updateQTable(QTable& qTable, Point<int> currentState,
   int index = static_cast<int>(action);
 
   auto& nextState = qTable[next.row][next.col];
-  float maxQNext = *std::max_element(nextState.qValues.begin(), nextState.qValues.end());
+  float maxQNext =
+      *std::max_element(nextState.qValues.begin(), nextState.qValues.end());
 
   float tg_target = reward + gamma * maxQNext;
   float tg_error = tg_target - state.qValues[index];

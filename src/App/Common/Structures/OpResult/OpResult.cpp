@@ -26,4 +26,4 @@ bool OpResult::IsSuccess() { return isSuccess_; }
  * @return Operation result message
  */
 std::string OpResult::getErrorMessage() const { return errorMessage_; }
-} // namespace s21
+}  // namespace s21

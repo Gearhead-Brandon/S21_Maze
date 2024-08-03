@@ -6,155 +6,153 @@
 #ifndef __S21MATRIX_H__
 #define __S21MATRIX_H__
 
-#include <iostream>
 #include <cmath>
 #include <cstring>
+#include <iostream>
 
-#define IncorrectValuesRowsOrColumns                                           \
+#define IncorrectValuesRowsOrColumns \
   "Incorrect values for initialization, rows and cols should be > 0 "
-#define IncorrectValuesRowsOrColumnsResize                                     \
+#define IncorrectValuesRowsOrColumnsResize \
   "Incorrect values for resize, rows and cols should be > 0 "
 #define DiffSizesMatrices "Different matrix dimensions"
 #define DiffSizesMatrices "Different matrix dimensions"
-#define NumColsNotEqNumRows                                                    \
-  "The number of columns of the first matrix is not equal to the number of "   \
+#define NumColsNotEqNumRows                                                  \
+  "The number of columns of the first matrix is not equal to the number of " \
   "rows of the second matrix"
 #define MatrixNotSquare "The matrix is not square."
 #define DetIsZero "The determinant of the matrix is zero"
 #define IndexesOutOfRange "Indexes is out of range"
 
-namespace s21{
-  
+namespace s21 {
+
+/**
+ * @brief Class describing the matrix
+ * @tparam T type of matrix
+ */
+template <typename T>
+class S21Matrix {
+  //! Count of rows
+  int rows_;
+
+  //! Count of columns
+  int cols_;
+
+  //! Pointer to the matrix
+  T **matrix_;
+
   /**
-   * @brief Class describing the matrix
-   * @tparam T type of matrix
+   * @brief Create matrix
    */
-  template <typename T>
-  class S21Matrix {
-    
-    //! Count of rows
-    int rows_;
+  void CreateMatrix();
 
-    //! Count of columns
-    int cols_;
+ public:
+  /**
+   * @brief Default constructor
+   */
+  S21Matrix();
 
-    //! Pointer to the matrix
-    T** matrix_;
+  /**
+   * @brief Parameterized constructor
+   * @param rows count of rows
+   * @param cols count of columns
+   */
+  S21Matrix(size_t rows, size_t cols);
 
-    /**
-     * @brief Create matrix
-     */
-    void CreateMatrix();
+  /**
+   * @brief Copy constructor
+   * @param other
+   */
+  S21Matrix(const S21Matrix &other);
 
-  public:
+  /**
+   * @brief Move constructor
+   * @param other
+   */
+  S21Matrix(S21Matrix &&other);
 
-    /**
-     * @brief Default constructor
-     */
-    S21Matrix();
+  /**
+   * @brief Copy assignment operator
+   * @param other
+   */
+  S21Matrix &operator=(const S21Matrix &other);
 
-    /**
-     * @brief Parameterized constructor
-     * @param rows count of rows
-     * @param cols count of columns
-     */
-    S21Matrix(size_t rows, size_t cols);
+  /**
+   * @brief Move assignment operator
+   * @param other
+   */
+  S21Matrix &operator=(S21Matrix &&other);
 
-    /**
-     * @brief Copy constructor
-     * @param other
-     */
-    S21Matrix(const S21Matrix &other);
+  /**
+   * @brief Destructor
+   */
+  ~S21Matrix();
 
-    /**
-     * @brief Move constructor
-     * @param other
-     */
-    S21Matrix(S21Matrix &&other);
+  /**
+   * @brief Get count of rows
+   * @return count of rows
+   */
+  int GetRows() const;
 
-    /**
-     * @brief Copy assignment operator
-     * @param other
-     */
-    S21Matrix& operator=(const S21Matrix &other);
+  /**
+   * @brief Get count of columns
+   * @return count of columns
+   */
+  int GetCols() const;
 
-    /**
-     * @brief Move assignment operator
-     * @param other
-     */
-    S21Matrix& operator=(S21Matrix &&other);
+  /**
+   * @brief Set count of rows
+   * @param newRows
+   */
+  void SetRows(int newRows);
 
-    /**
-     * @brief Destructor
-     */
-    ~S21Matrix();                 
+  /**
+   * @brief Set count of columns
+   * @param newCols
+   */
+  void SetCols(int newCols);
 
-    /**
-     * @brief Get count of rows
-     * @return count of rows
-     */
-    int GetRows() const;
+  /**
+   * @brief Resize matrix
+   * @param new_rows
+   * @param new_cols
+   */
+  void Resize(int new_rows, int new_cols);
 
-    /**
-     * @brief Get count of columns
-     * @return count of columns
-     */
-    int GetCols() const;
+  /**
+   * @brief Check if two matrices are equal
+   * @param other
+   * @return true if two matrices are equal
+   */
+  bool Equal(const S21Matrix &other) const;
 
-    /**
-     * @brief Set count of rows
-     * @param newRows 
-     */
-    void SetRows(int newRows);
+  /**
+   * @brief Swap matrix
+   * @param other
+   */
+  void swap(S21Matrix &other);
 
-    /**
-     * @brief Set count of columns
-     * @param newCols
-     */
-    void SetCols(int newCols);
+  /**
+   * @brief Equal operator
+   * @param other
+   * @return true if two matrices are equal
+   */
+  bool operator==(const S21Matrix &other) const;
 
-    /**
-     * @brief Resize matrix
-     * @param new_rows
-     * @param new_cols
-     */
-    void Resize(int new_rows, int new_cols);
+  /**
+   * @brief Operator () for access to the matrix
+   * @param row
+   * @param col
+   * @return T&
+   */
+  T &operator()(int row, int col) const;
 
-    /**
-     * @brief Check if two matrices are equal
-     * @param other
-     * @return true if two matrices are equal
-     */
-    bool Equal(const S21Matrix &other) const;
-
-    /**
-     * @brief Swap matrix
-     * @param other
-     */
-    void swap(S21Matrix &other);
-
-    /**
-     * @brief Equal operator
-     * @param other
-     * @return true if two matrices are equal
-     */
-    bool operator==(const S21Matrix &other) const;
-
-    /**
-     * @brief Operator () for access to the matrix
-     * @param row
-     * @param col
-     * @return T&
-     */
-    T& operator()(int row, int col) const;
-
-    /**
-     * @brief Fill matrix with numbers
-     * @param num
-     */
-    void FillNumbers(T num);
-  };
-}
+  /**
+   * @brief Fill matrix with numbers
+   * @param num
+   */
+  void FillNumbers(T num);
+};
+}  // namespace s21
 
 #include "S21Matrix.tpp"
 

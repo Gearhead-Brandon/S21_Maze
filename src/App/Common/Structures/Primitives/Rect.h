@@ -6,43 +6,43 @@
 #ifndef RECT_H
 #define RECT_H
 
-namespace s21{
+namespace s21 {
 
-    /**
-     * @brief The class Rect
-     */
-    struct Rect{
+/**
+ * @brief The class Rect
+ */
+struct Rect {
+  //! The x coordinate
+  float x;
 
-        //! The x coordinate
-        float x;
+  //! The y coordinate
+  float y;
 
-        //! The y coordinate
-        float y;
+  //! The width
+  float width;
 
-        //! The width
-        float width;
+  //! The height
+  float height;
 
-        //! The height
-        float height;
+  /**
+   * @brief The default constructor
+   */
+  Rect() : x(0), y(0), width(0), height(0) {}
 
-        /**
-         * @brief The default constructor
-         */
-        Rect() : x(0), y(0), width(0), height(0) {}
+  /**
+   * @brief The parametrized constructor
+   */
+  Rect(float x, float y, float width, float height)
+      : x(x), y(y), width(width), height(height) {}
 
-        /**
-         * @brief The parametrized constructor
-         */
-        Rect(float x, float y, float width, float height) 
-            : x(x), y(y), width(width), height(height) {}
-
-        /**
-         * @brief The equality operator
-         */
-        bool operator==(const Rect &other) const {
-            return x == other.x && y == other.y && width == other.width && height == other.height;
-        }
-    };
-}
+  /**
+   * @brief The equality operator
+   */
+  bool operator==(const Rect &other) const {
+    return x == other.x && y == other.y && width == other.width &&
+           height == other.height;
+  }
+};
+}  // namespace s21
 
 #endif

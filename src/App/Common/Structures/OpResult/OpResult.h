@@ -15,14 +15,13 @@ namespace s21 {
  * operations
  */
 class OpResult {
-
   //! Operation success flag
   bool isSuccess_;
 
   //! Operation result message
   std::string errorMessage_;
 
-public:
+ public:
   /**
    * @brief The constructor of the class OpResult
    * @param isSuccess Operation success flag
@@ -47,6 +46,6 @@ public:
    */
   std::string getErrorMessage() const;
 };
-} // namespace s21
+}  // namespace s21
 
 #endif

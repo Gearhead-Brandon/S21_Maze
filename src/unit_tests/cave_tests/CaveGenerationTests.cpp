@@ -4,7 +4,7 @@
 using namespace s21;
 
 class CaveGenerationTests : public testing::Test {
-protected:
+ protected:
   Cave cave_;
 
   void SetUp() override {}
@@ -12,7 +12,7 @@ protected:
 };
 
 TEST_F(CaveGenerationTests, GenerationCave) {
-  // Act 
+  // Act
   OpResult result = cave_.generate(5, 5, 50);
   std::vector<Rect> field = cave_.get(500, 500);
 
@@ -21,7 +21,6 @@ TEST_F(CaveGenerationTests, GenerationCave) {
   EXPECT_EQ(result.getErrorMessage(), "");
 
   EXPECT_TRUE(field.size() > 0);
-
 
   // Act
   result = cave_.generate(50, 50, 40);
@@ -37,15 +36,14 @@ TEST_F(CaveGenerationTests, GenerationCave) {
 TEST_F(CaveGenerationTests, IncorrectInitChance) {
   // Act
   OpResult result = cave_.generate(5, 5, 101);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect init chance");
 
-
   // Act
   result = cave_.generate(5, 5, 0);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect init chance");
@@ -54,31 +52,28 @@ TEST_F(CaveGenerationTests, IncorrectInitChance) {
 TEST_F(CaveGenerationTests, IncorrectCaveSize) {
   // Act
   OpResult result = cave_.generate(0, 5, 50);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect cave size");
-
 
   // Act
   result = cave_.generate(5, 0, 50);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect cave size");
-
 
   // Act
   result = cave_.generate(51, 5, 0);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect cave size");
 
-
   // Act
   result = cave_.generate(5, 51, 0);
-  
+
   // Assert
   EXPECT_FALSE(result.IsSuccess());
   EXPECT_EQ(result.getErrorMessage(), "Incorrect cave size");

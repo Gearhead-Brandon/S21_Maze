@@ -4,22 +4,21 @@
  */
 
 #include "FileReader.h"
+
 #include <iostream>
 
-namespace s21{
+namespace s21 {
 
-    /**
-     * @brief Parametrized constructor
-     * @param path - path to the file
-     */
-    FileReader::FileReader(const std::string &path) 
-        : file(path){}
+/**
+ * @brief Parametrized constructor
+ * @param path - path to the file
+ */
+FileReader::FileReader(const std::string &path) : file(path) {}
 
-    /**
-     * @brief Destructor
-     */
-    FileReader::~FileReader() {
-        if(file.is_open())
-            file.close();
-    }
+/**
+ * @brief Destructor
+ */
+FileReader::~FileReader() {
+  if (file.is_open()) file.close();
 }
+}  // namespace s21

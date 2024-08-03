@@ -8,28 +8,27 @@
 
 #include <fstream>
 
-namespace s21{
+namespace s21 {
 
-    /**
-     * @brief Wrapper for std::ifstream
-     */
-    class FileReader {
-    public:
+/**
+ * @brief Wrapper for std::ifstream
+ */
+class FileReader {
+ public:
+  //! File stream
+  std::ifstream file;
 
-        //! File stream
-        std::ifstream file;
+  /**
+   * @brief Parametrized constructor
+   * @param path - path to the file
+   */
+  FileReader(const std::string &path);
 
-        /**
-         * @brief Parametrized constructor
-         * @param path - path to the file
-         */
-        FileReader(const std::string &path);
-
-        /**
-         * @brief Destructor
-         */
-        ~FileReader();
-    };
-}
+  /**
+   * @brief Destructor
+   */
+  ~FileReader();
+};
+}  // namespace s21
 
 #endif

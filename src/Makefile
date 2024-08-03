@@ -15,6 +15,8 @@ EXCLUDE_FILES = "unit_tests/*" "App/Common/Structures/*" "App/Model/S21Matrix"\
 				"App/Model/FileReader/*"		
 EXCLUDE_REPORT = $(foreach file, $(EXCLUDE_FILES), --exclude $(file)) 
 
+DISTRIBUTION = $(EXECUTE).tar
+
 all: install
 
 install: clean uninstall
@@ -46,6 +48,18 @@ move_report:
 
 peer: gcov_report
 	@open $(DIR_REPORT)/$(HTML_REPORT)
+
+dvi:
+#	@doxygen doc/Doxyfile
+	@google-chrome doc/html/index.html
+
+dist:
+	@if [ -d "$(DIR_INSTALL)" ]; then \
+		(cd $(DIR_INSTALL) && tar -cf $(DISTRIBUTION) . && mv $(DISTRIBUTION) ../); \
+	else \
+		echo "Directory $(DIR_INSTALL) does not exist."; \
+	fi
+	
 
 clean: rm_build
 	@rm -rf ./$(DIR_TEST)/$(TEST_EXECUTE)
