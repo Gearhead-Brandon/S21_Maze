@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(BrickGame LANGUAGES C CXX)
+project(Maze LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
