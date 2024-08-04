@@ -7,13 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror -Wextra") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fprofile-arcs -ftest-coverage") 
-
-# set(CMAKE_AUTOMOC ON)
-# set(CMAKE_AUTORCC ON)
-# set(CMAKE_AUTOUIC ON)
-# find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets OpenGLWidgets)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -fprofile-arcs -ftest-coverage -Wall -Werror -Wextra") 
 
 file(GLOB SOURCE_FILES
     "*.cpp"
@@ -54,7 +48,6 @@ target_link_libraries(
 set_target_properties(
     Tests
     PROPERTIES
-    #COMPILE_FLAGS "-fprofile-arcs -ftest-coverage"
     LINK_FLAGS "--coverage"
     ENABLE_TESTING TRUE
 )

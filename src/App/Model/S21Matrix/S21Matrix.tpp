@@ -44,7 +44,7 @@ void S21Matrix<T>::CreateMatrix() {
  */
 template <typename T>
 S21Matrix<T>::S21Matrix(const S21Matrix &other)
-    : matrix_(nullptr), rows_(other.rows_), cols_(other.cols_) {
+    : rows_(other.rows_), cols_(other.cols_), matrix_(nullptr) {
   S21Matrix temp(other.rows_, other.cols_);
 
   for (int i = 0; i < rows_; i++)

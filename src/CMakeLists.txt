@@ -7,8 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_CXX_COMPILER "/usr/bin/g++-11")
 
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror -Wextra") 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 ") 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Werror -Wextra") 
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -24,11 +23,6 @@ file(GLOB_RECURSE SOURCE_FILES
     "./App/*.h"
     "./App/*.cpp"
 )
-
-#Create a library target
-
-# add_library(desktop_ui STATIC ${LIB_DESKTOP})
-# target_link_libraries(desktop_ui Qt6::Core Qt6::Gui Qt6::Widgets)
 
 # Create an executable target
 add_executable(Maze ${MAIN} ${SOURCE_FILES})

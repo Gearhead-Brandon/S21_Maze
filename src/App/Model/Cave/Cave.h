@@ -74,12 +74,11 @@ class Cave : public Observable {
  private:
   /**
    * @brief Count living neighbors
-   * @param field - field
    * @param row - row
    * @param col - column
    * @return Count of living neighbors
    */
-  int countLivingNeighbors(S21Matrix<char> field, int row, int col);
+  int countLivingNeighbors(int row, int col);
 
   /**
    * @brief Parameters check

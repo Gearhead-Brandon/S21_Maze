@@ -149,7 +149,7 @@ void Cave::oneStepTransform(int birthLimit, int deathLimit) {
 
   for (int i = 0; i < rows; i++) {
     for (int j = 0; j < cols; j++) {
-      int count = countLivingNeighbors(buffer, i, j);
+      int count = countLivingNeighbors(i, j);
 
       if (caveMatrix_(i, j) == '1')  // Living
         if (count < deathLimit) caveMatrix_(i, j) = '0';
@@ -169,7 +169,7 @@ void Cave::oneStepTransform(int birthLimit, int deathLimit) {
  * @param col - column
  * @return Count of living neighbors
  */
-int Cave::countLivingNeighbors(S21Matrix<char> field, int row, int col) {
+int Cave::countLivingNeighbors(int row, int col) {
   int rows = caveMatrix_.GetRows();
   int cols = caveMatrix_.GetCols();
 

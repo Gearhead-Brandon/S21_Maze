@@ -25,7 +25,7 @@ CaveRenderer::~CaveRenderer() { delete cave_; }
  * @brief Paint the widget
  * @param event - event
  */
-void CaveRenderer::paintEvent(QPaintEvent* event) {
+void CaveRenderer::paintEvent(QPaintEvent*) {
   QPainter painter(this);
   painter.drawImage(0, 0, *cave_);
 }
@@ -62,7 +62,7 @@ void CaveRenderer::updateCave() {
  * @brief Resize the widget
  * @param event - event
  */
-void CaveRenderer::resizeEvent(QResizeEvent* event) {
+void CaveRenderer::resizeEvent(QResizeEvent*) {
   float w = width();
   float h = height();
 

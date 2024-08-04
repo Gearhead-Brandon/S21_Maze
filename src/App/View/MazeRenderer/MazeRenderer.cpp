@@ -25,7 +25,7 @@ MazeRenderer::~MazeRenderer() { delete maze_; }
  * @brief Paint the widget
  * @param event - event
  */
-void MazeRenderer::paintEvent(QPaintEvent* event) {
+void MazeRenderer::paintEvent(QPaintEvent*) {
   QPainter painter(this);
   painter.drawImage(0, 0, *maze_);
   painter.drawImage(0, 0, *path_);
@@ -138,7 +138,7 @@ void MazeRenderer::updatePath() {
  * @brief Resize the widget
  * @param event - event
  */
-void MazeRenderer::resizeEvent(QResizeEvent* event) {
+void MazeRenderer::resizeEvent(QResizeEvent*) {
   float w = width();
   float h = height();
 

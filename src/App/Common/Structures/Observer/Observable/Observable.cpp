@@ -20,6 +20,6 @@ void Observable::addObserver(IObserver *observer) {
  * method update
  */
 void Observable::notifyUpdate() {
-  for (int i = 0; i < _observers.size(); i++) _observers[i]->update();
+  for (std::size_t i = 0; i < _observers.size(); i++) _observers[i]->update();
 }
 }  // namespace s21
