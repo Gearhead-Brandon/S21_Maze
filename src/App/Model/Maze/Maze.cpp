@@ -12,8 +12,6 @@
 #include <iostream>
 #include <sstream>
 
-#include "../FileReader/FileReader.h"
-
 namespace s21 {
 
 /**
@@ -33,24 +31,24 @@ Maze::~Maze() { delete pathFinder_; }
  * @return Operation result
  */
 OpResult Maze::load(const std::string &path) {
-  FileReader reader(path);
-  if (!reader.file.is_open()) return {false, "File not found"};
+  std::ifstream file(path);
+  if (!file.is_open()) return {false, "File not found"};
 
   int rows = 0, cols = 0;
 
-  reader.file >> rows >> cols;
+  file >> rows >> cols;
 
   if ((rows <= 0 || cols <= 0) || (rows > 50 || cols > 50))
     return {false, "Incorrect maze size"};
 
-  reader.file >> std::ws;
+  file >> std::ws;
 
   verticalMatrix_.Resize(rows, cols);
 
   std::string line("");
 
   for (int i = 0; i < rows; i++) {
-    std::getline(reader.file, line);
+    std::getline(file, line);
     std::istringstream iss(line);
 
     for (int j = 0; j < cols; j++) {
@@ -66,14 +64,14 @@ OpResult Maze::load(const std::string &path) {
     }
   }
 
-  reader.file >> std::ws;
+  file >> std::ws;
 
   line.clear();
 
   horizontalMatrix_.Resize(rows, cols);
 
   for (int i = 0; i < rows; i++) {
-    std::getline(reader.file, line);
+    std::getline(file, line);
     std::istringstream iss(line);
 
     for (int j = 0; j < cols; j++) {
@@ -149,8 +147,6 @@ void Maze::save() {
   file << std::endl;
 
   loadMatrixToFile(horizontalMatrix_, file, true);
-
-  file.close();
 }
 
 /**

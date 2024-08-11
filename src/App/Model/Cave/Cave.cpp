@@ -26,23 +26,23 @@ Cave::Cave() : caveMatrix_() {}
  * @return Operation result
  */
 OpResult Cave::load(const std::string &path) {
-  FileReader reader(path);
-  if (!reader.file.is_open()) return {false, "File not found"};
+  std::ifstream file(path);
+  if (!file.is_open()) return {false, "File not found"};
 
   size_t rows = 0, cols = 0;
 
-  reader.file >> rows >> cols;
+  file >> rows >> cols;
 
   if (rows <= 0 || rows > 50 || cols <= 0 || cols > 50)
     return {false, "Incorrect cave size"};
 
-  reader.file >> std::ws;
+  file >> std::ws;
 
   caveMatrix_.Resize(rows, cols);
 
   for (size_t i = 0; i < rows; i++) {
     std::string line("");
-    std::getline(reader.file, line);
+    std::getline(file, line);
     std::istringstream iss(line);
 
     for (size_t j = 0; j < cols; j++) {
