@@ -11,8 +11,6 @@
 #include <sstream>
 #include <thread>
 
-#include "../FileReader/FileReader.h"
-
 namespace s21 {
 
 /**

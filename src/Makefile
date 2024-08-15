@@ -50,8 +50,8 @@ peer: gcov_report
 	@open $(DIR_REPORT)/$(HTML_REPORT)
 
 dvi:
-#	@doxygen doc/Doxyfile
-	@google-chrome doc/html/index.html
+	@doxygen ./doc/Doxyfile
+#	@google-chrome doc/html/index.html
 
 dist:
 	@if [ -d "$(DIR_INSTALL)" ]; then \
@@ -70,4 +70,4 @@ rm_build:
 	@rm -rf $(APP_BUILD)
 	@rm -rf $(TEST_BUILD)
 
-rebuild: clean install
+rebuild: clean uninstall install
